@@ -5,6 +5,7 @@
         <q-btn flat round dense icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title> {{ title }} </q-toolbar-title>
+        <div>{{ currentDate }}</div>
       </q-toolbar>
 
       <q-tabs>
@@ -32,6 +33,7 @@
 <script setup>
 import { ref, defineProps } from 'vue'
 import Sidebar from './SidebarLayout.vue'
+import { getCurrentDate } from '../utils/date'
 
 const { title } = defineProps({
   title: {
@@ -45,4 +47,7 @@ const leftDrawerOpen = ref(false)
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
+
+// Отримуємо поточну дату з utils/date.js
+const currentDate = ref(getCurrentDate())
 </script>

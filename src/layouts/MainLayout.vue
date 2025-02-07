@@ -4,9 +4,9 @@
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-toolbar-title> Shop App </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>{{ currentDate }}</div>
       </q-toolbar>
     </q-header>
 
@@ -21,10 +21,14 @@
 <script setup>
 import { ref } from 'vue'
 import Sidebar from './SidebarLayout.vue'
+import { getCurrentDate } from '../utils/date'
 
 const leftDrawerOpen = ref(false) // Сайдбар закритий за замовчуванням
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
+
+// Отримуємо поточну дату з utils/date.js
+const currentDate = ref(getCurrentDate())
 </script>
