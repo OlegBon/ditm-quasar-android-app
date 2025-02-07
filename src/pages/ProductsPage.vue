@@ -9,6 +9,9 @@
     <div>
       <q-list v-for="product in filteredProducts" :key="product.id" bordered separator>
         <q-item clickable v-ripple>
+          <q-item-section class="product-img-section"
+            ><img class="product-img" alt="Product image" :src="product.thumbnail"
+          /></q-item-section>
           <q-item-section>{{ product.title }}</q-item-section>
         </q-item>
       </q-list>
