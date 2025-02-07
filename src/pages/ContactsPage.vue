@@ -1,12 +1,6 @@
 <template>
   <q-page padding>
-    <h1>Hello!</h1>
-    <img
-      class="home-img"
-      alt="Quasar logo"
-      src="~assets/home-banner.jpg"
-      style="width: 100%; height: 100%"
-    />
+    <h1>Our Contacts</h1>
     <p class="p-16">
       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit odit non aut, praesentium
       explicabo eligendi quaerat assumenda dolor tempora quae omnis quasi molestias? Nobis enim

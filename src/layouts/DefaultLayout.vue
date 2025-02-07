@@ -17,7 +17,9 @@
 
     <q-footer>
       <q-toolbar>
-        <q-toolbar-title> <div class="footer">@2025 - All right reserved</div> </q-toolbar-title>
+        <q-toolbar-title>
+          <div class="footer">@2025 - All right reserved -OlegBon</div>
+        </q-toolbar-title>
       </q-toolbar>
     </q-footer>
 
