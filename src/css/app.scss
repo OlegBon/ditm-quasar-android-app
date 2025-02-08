@@ -32,8 +32,19 @@ h1 {
   font-size: 16px;
 }
 
-.search-products {
+.search-products,
+.filter-products,
+.quantity-products {
   margin: 20px;
+}
+
+.quantity-products {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.quantity-products span {
+  color: #1976d2;
 }
 
 .product-img-section {
@@ -43,4 +54,10 @@ h1 {
 
 .product-img {
   max-width: 100%;
+}
+
+.back-to-top {
+  position: fixed;
+  right: 16px;
+  bottom: 80px; /* Поруч з футером */
 }

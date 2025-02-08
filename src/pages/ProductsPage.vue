@@ -1,17 +1,34 @@
 <template>
-  <q-page>
+  <q-page padding>
     <q-input v-model="search" debounce="500" filled placeholder="Search" class="search-products">
       <template v-slot:append>
-        <q-icon name="search" />
+        <q-icon v-if="!search" name="search" />
+        <q-icon v-if="search" name="close" @click="clearSearch" />
       </template>
     </q-input>
 
+    <!-- Фільтр за категоріями -->
+    <q-select
+      filled
+      v-model="selectedCategory"
+      :options="categoryOptions"
+      label="Select Category"
+      class="filter-products"
+      behavior="menu"
+      option-label="label"
+      option-value="value"
+    />
+
+    <p class="quantity-products">
+      Quantity of Products: <span>{{ productCount }}</span>
+    </p>
+
     <div>
-      <q-list v-for="product in filteredProducts" :key="product.id" bordered separator>
+      <q-list v-for="product in filteredAndDisplayedProducts" :key="product.id" bordered separator>
         <q-item clickable v-ripple>
-          <q-item-section class="product-img-section"
-            ><img class="product-img" alt="Product image" :src="product.thumbnail"
-          /></q-item-section>
+          <q-item-section class="product-img-section">
+            <img class="product-img" alt="Product image" :src="product.thumbnail" loading="lazy" />
+          </q-item-section>
           <q-item-section>{{ product.title }}</q-item-section>
         </q-item>
       </q-list>
@@ -20,21 +37,87 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { api } from 'boot/axios'
 
-const search = ref('') // Додаємо змінну search
-let products = ref([])
+const search = ref('')
+const selectedCategory = ref({ label: 'All Products', value: '' }) // Початково обираємо всі продукти
+const allProducts = ref([])
+const categories = ref([])
+const limit = ref(30)
+const page = ref(1)
 
-// Фільтровані продукти на основі пошуку
-const filteredProducts = computed(() => {
-  if (!search.value) return products.value
-  return products.value.filter((product) =>
-    product.title.toLowerCase().includes(search.value.toLowerCase()),
-  )
+const productCount = computed(() => {
+  if (search.value) {
+    return filteredAndDisplayedProducts.value.length
+  }
+  if (selectedCategory.value === null || selectedCategory.value.value === '') {
+    return allProducts.value.length
+  }
+  const categoryValue = selectedCategory.value.value
+  return allProducts.value.filter((product) => product.category === categoryValue).length
 })
 
-api('https://dummyjson.com/products').then(({ data }) => {
-  products.value = data.products
+const filteredAndDisplayedProducts = computed(() => {
+  let filteredProducts = allProducts.value
+
+  if (selectedCategory.value.value !== '') {
+    const categoryValue = selectedCategory.value.value
+    // console.log('Filtering by category:', categoryValue)
+
+    if (categoryValue) {
+      filteredProducts = filteredProducts.filter((product) => product.category === categoryValue)
+    }
+  }
+
+  if (search.value) {
+    filteredProducts = filteredProducts.filter((product) =>
+      product.title.toLowerCase().includes(search.value.toLowerCase()),
+    )
+  }
+
+  return filteredProducts.slice(0, page.value * limit.value)
 })
+
+const categoryOptions = computed(() => [
+  { label: 'All Products', value: '' }, // Значення для "всіх продуктів"
+  ...categories.value,
+])
+
+async function loadCategories() {
+  const { data } = await api('https://dummyjson.com/products/categories')
+  categories.value = data.map((category) => ({
+    label: category.name, // Відображається у select
+    value: category.slug, // Використовується для фільтрації
+  }))
+}
+
+async function loadAllProducts() {
+  const { data } = await api('https://dummyjson.com/products?limit=0')
+  allProducts.value = data.products
+}
+
+onMounted(() => {
+  loadCategories()
+  loadAllProducts()
+  window.addEventListener('scroll', handleScroll)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+function handleScroll() {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2) {
+    loadMore()
+  }
+}
+
+function loadMore() {
+  page.value++
+}
+
+function clearSearch() {
+  search.value = ''
+}
 </script>

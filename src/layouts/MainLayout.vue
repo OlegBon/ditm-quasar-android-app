@@ -14,6 +14,7 @@
 
     <q-page-container>
       <router-view />
+      <BackToTopButton />
     </q-page-container>
   </q-layout>
 </template>
@@ -22,6 +23,7 @@
 import { ref } from 'vue'
 import Sidebar from './SidebarLayout.vue'
 import { getCurrentDate } from '../utils/date'
+import BackToTopButton from '../components/BackToTopButton.vue' // Імпорт компонента
 
 const leftDrawerOpen = ref(false) // Сайдбар закритий за замовчуванням
 

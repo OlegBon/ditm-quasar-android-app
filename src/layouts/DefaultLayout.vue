@@ -16,24 +16,26 @@
 
     <Sidebar v-model:open="leftDrawerOpen" />
 
+    <q-page-container>
+      <router-view />
+      <BackToTopButton />
+    </q-page-container>
+
     <q-footer>
       <q-toolbar>
         <q-toolbar-title>
-          <div class="footer">@2025 - All right reserved -OlegBon</div>
+          <div class="footer">@2025 - All right reserved - OlegBon</div>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 import Sidebar from './SidebarLayout.vue'
 import { getCurrentDate } from '../utils/date'
+import BackToTopButton from '../components/BackToTopButton.vue' // Імпорт компонента
 
 const { title } = defineProps({
   title: {
