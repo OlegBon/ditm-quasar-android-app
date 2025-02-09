@@ -1,5 +1,7 @@
 <template>
-  <DefaultLayout title="Login" />
+  <DefaultLayout title="Login">
+    <router-view />
+  </DefaultLayout>
 </template>
 
 <script setup>
