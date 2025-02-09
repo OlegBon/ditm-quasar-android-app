@@ -108,7 +108,7 @@ const loginLink = {
 const userLink = computed(() => ({
   title: user.value && user.value.username ? user.value.username : 'User',
   caption: user.value ? user.value.email : '',
-  icon: user.value && user.value.image ? user.value.image : '',
+  icon: user.value && user.value.image ? user.value.image : 'ion-person',
   link: '/user',
 }))
 
