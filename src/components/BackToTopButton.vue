@@ -2,9 +2,9 @@
   <q-btn
     v-if="showBackToTop"
     @click="scrollToTop"
+    color="primary"
     icon="arrow_upward"
-    fab
-    outline
+    round
     class="back-to-top"
   />
 </template>
