@@ -41,6 +41,8 @@
               </template>
             </q-input>
 
+            <div v-if="loginError" class="text-negative">Invalid email or password</div>
+
             <div>
               <q-btn label="Sign In" type="submit" color="primary" />
               <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
@@ -119,9 +121,12 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const activeTab = ref('signIn')
-const formSubmitted = ref(false) // Додаємо змінну для перевірки сабміту
+const formSubmitted = ref(false)
+const loginError = ref(false) // Додаємо змінну для перевірки помилок логіну
 
 // Змінні для форми Sign In
 const signInEmail = ref('')
@@ -167,12 +172,26 @@ function toggleShowSignUpRepeatPassword() {
 
 // Функції сабміту та скидання для форми Sign In
 const signInForm = ref(null)
+const router = useRouter()
 
-function onSignInSubmit() {
+async function onSignInSubmit() {
   // Виконуємо валідацію перед сабмітом
-  signInForm.value.validate().then((isValid) => {
+  signInForm.value.validate().then(async (isValid) => {
     if (isValid) {
       // Логіка сабміту форми Sign In
+      const { data } = await axios.get('https://dummyjson.com/users')
+      const user = data.users.find(
+        (user) => user.email === signInEmail.value && user.password === signInPassword.value,
+      )
+      if (user) {
+        loginError.value = false
+        // Отримуємо дані користувача за ID
+        const userDetail = await axios.get(`https://dummyjson.com/users/${user.id}`)
+        localStorage.setItem('loggedInUser', JSON.stringify(userDetail.data))
+        router.push('/user')
+      } else {
+        loginError.value = true
+      }
     } else {
       console.log('Validation failed')
     }

@@ -8,24 +8,59 @@
     <q-list>
       <q-item-label header> Welcome to App </q-item-label>
 
-      <!-- Перший блок лінків -->
-      <EssentialLink v-for="link in linksList.slice(0, 1)" :key="link.title" v-bind="link" />
+      <!-- Лінки для залогінених користувачів -->
+      <q-item clickable v-if="isLoggedIn" :key="userLink.title" tag="a" :href="userLink.link">
+        <q-item-section avatar>
+          <q-avatar v-if="userLink.icon">
+            <img :src="userLink.icon" alt="User Image" />
+          </q-avatar>
+          <q-icon v-else name="person" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ userLink.title }}</q-item-label>
+          <q-item-label caption>{{ userLink.caption }}</q-item-label>
+        </q-item-section>
+      </q-item>
+
+      <!-- Лінки для незалогінених користувачів -->
+      <EssentialLink
+        v-else
+        :key="loginLink.title"
+        :title="loginLink.title"
+        :caption="loginLink.caption"
+        :icon="loginLink.icon"
+        :link="loginLink.link"
+      />
 
       <q-separator />
 
-      <!-- Другий блок лінків -->
-      <EssentialLink v-for="link in linksList.slice(1, 5)" :key="link.title" v-bind="link" />
+      <!-- Основні лінки -->
+      <EssentialLink
+        v-for="link in visibleLinksList"
+        :key="link.title"
+        :title="link.title"
+        :caption="link.caption"
+        :icon="link.icon"
+        :link="link.link"
+      />
 
       <q-separator />
 
-      <!-- Третій блок лінків -->
-      <EssentialLink v-for="link in linksList.slice(5)" :key="link.title" v-bind="link" />
+      <!-- Додаткові лінки -->
+      <EssentialLink
+        v-for="link in additionalLinksList"
+        :key="link.title"
+        :title="link.title"
+        :caption="link.caption"
+        :icon="link.icon"
+        :link="link.link"
+      />
     </q-list>
   </q-drawer>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
 const props = defineProps({
@@ -38,6 +73,8 @@ const props = defineProps({
 const emit = defineEmits(['update:open'])
 
 const drawerOpen = ref(props.open)
+const isLoggedIn = ref(false)
+const user = ref(null)
 
 watch(
   () => props.open,
@@ -51,13 +88,31 @@ function updateDrawerOpen(value) {
   emit('update:open', value)
 }
 
-const linksList = [
-  {
-    title: 'Login',
-    caption: 'Sign In',
-    icon: 'ion-log-in',
-    link: '/login',
-  },
+function checkLoggedIn() {
+  const loggedInUser = localStorage.getItem('loggedInUser')
+  if (loggedInUser) {
+    user.value = JSON.parse(loggedInUser)
+    isLoggedIn.value = true
+  } else {
+    isLoggedIn.value = false
+  }
+}
+
+const loginLink = {
+  title: 'Login',
+  caption: 'Sign In',
+  icon: 'ion-log-in',
+  link: '/login',
+}
+
+const userLink = computed(() => ({
+  title: user.value && user.value.username ? user.value.username : 'User',
+  caption: user.value ? user.value.email : '',
+  icon: user.value && user.value.image ? user.value.image : '',
+  link: '/user',
+}))
+
+const linksList = ref([
   {
     title: 'About',
     caption: 'About Us',
@@ -82,6 +137,9 @@ const linksList = [
     icon: 'map',
     link: '/contacts',
   },
+])
+
+const additionalLinksList = [
   {
     title: 'Github',
     caption: 'github.com/OlegBon',
@@ -89,4 +147,16 @@ const linksList = [
     link: 'https://github.com/OlegBon/ditm-quasar-android-app',
   },
 ]
+
+const visibleLinksList = computed(() => {
+  if (isLoggedIn.value) {
+    return linksList.value
+  } else {
+    return linksList.value.filter((link) => link.title !== 'Cart')
+  }
+})
+
+onMounted(() => {
+  checkLoggedIn()
+})
 </script>

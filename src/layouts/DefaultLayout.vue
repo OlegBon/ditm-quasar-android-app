@@ -10,7 +10,8 @@
 
       <q-tabs>
         <q-route-tab icon="home" to="/" replace label="Home" />
-        <q-route-tab icon="ion-cart" to="/cart" replace label="Cart" />
+        <q-route-tab v-if="isLoggedIn" icon="ion-cart" to="/cart" replace label="Cart" />
+        <q-route-tab v-else icon="login" to="/login" replace label="Login" />
       </q-tabs>
     </q-header>
 
@@ -32,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Sidebar from './SidebarLayout.vue'
 import { getCurrentDate } from '../utils/date'
 import BackToTopButton from '../components/BackToTopButton.vue' // Імпорт компонента
@@ -45,6 +46,7 @@ const { title } = defineProps({
 })
 
 const leftDrawerOpen = ref(false)
+const isLoggedIn = ref(false)
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
@@ -52,4 +54,13 @@ function toggleLeftDrawer() {
 
 // Отримуємо поточну дату з utils/date.js
 const currentDate = ref(getCurrentDate())
+
+function checkLoggedIn() {
+  const loggedInUser = localStorage.getItem('loggedInUser')
+  isLoggedIn.value = !!loggedInUser
+}
+
+onMounted(() => {
+  checkLoggedIn()
+})
 </script>
