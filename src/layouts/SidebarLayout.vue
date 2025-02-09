@@ -11,10 +11,10 @@
       <!-- Лінки для залогінених користувачів -->
       <q-item clickable v-if="isLoggedIn" :key="userLink.title" tag="a" :href="userLink.link">
         <q-item-section avatar>
-          <q-avatar v-if="userLink.icon">
+          <q-avatar v-if="userLink.icon !== 'ion-person'">
             <img :src="userLink.icon" alt="User Image" />
           </q-avatar>
-          <q-icon v-else name="person" />
+          <q-icon v-else name="ion-person" />
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ userLink.title }}</q-item-label>
@@ -106,9 +106,9 @@ const loginLink = {
 }
 
 const userLink = computed(() => ({
-  title: user.value && user.value.username ? user.value.username : 'User',
-  caption: user.value ? user.value.email : '',
-  icon: user.value && user.value.image ? user.value.image : 'ion-person',
+  title: user.value?.username || 'User',
+  caption: user.value?.email || '',
+  icon: user.value?.image || 'ion-person',
   link: '/user',
 }))
 

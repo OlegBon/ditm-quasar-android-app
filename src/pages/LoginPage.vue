@@ -107,6 +107,7 @@
             <div v-if="formSubmitted && !signUpAccept.value" class="text-negative">
               You must accept the license and terms
             </div>
+            <div v-if="userExists" class="text-negative">User already exists</div>
 
             <div>
               <q-btn label="Sign Up" type="submit" color="primary" />
@@ -127,6 +128,7 @@ import axios from 'axios'
 const activeTab = ref('signIn')
 const formSubmitted = ref(false)
 const loginError = ref(false) // Додаємо змінну для перевірки помилок логіну
+const userExists = ref(false) // Додаємо змінну для перевірки існуючого користувача
 
 // Змінні для форми Sign In
 const signInEmail = ref('')
@@ -207,8 +209,9 @@ function onSignInReset() {
 // Функції сабміту та скидання для форми Sign Up
 const signUpForm = ref(null)
 
-function onSignUpSubmit() {
+async function onSignUpSubmit() {
   formSubmitted.value = true // Встановлюємо флаг сабміту форми
+  userExists.value = false // Скидаємо значення для перевірки існуючого користувача
 
   // Перевірка поля accept перед відправленням форми
   if (!signUpAccept.value) {
@@ -216,10 +219,26 @@ function onSignUpSubmit() {
   }
 
   // Виконуємо валідацію перед сабмітом
-  signUpForm.value.validate().then((isValid) => {
+  signUpForm.value.validate().then(async (isValid) => {
     if (isValid) {
+      // Перевірка наявності email серед існуючих користувачів
+      const { data } = await axios.get('https://dummyjson.com/users')
+      const existingUser = data.users.find((user) => user.email === signUpEmail.value)
+
+      if (existingUser) {
+        userExists.value = true
+      } else {
+        userExists.value = false
+        // Додаємо користувача до локального сховища
+        const newUser = {
+          email: signUpEmail.value,
+          password: signUpPassword.value,
+        }
+        localStorage.setItem('loggedInUser', JSON.stringify(newUser))
+        router.push('/user')
+      }
+
       formSubmitted.value = false // Скидаємо флаг сабміту форми після успішної валідації
-      // Логіка сабміту форми Sign Up
     } else {
       console.log('Validation failed')
     }
@@ -228,7 +247,7 @@ function onSignUpSubmit() {
 
 watch(signUpAccept, (newVal) => {
   if (newVal) {
-    formSubmitted.value = false
+    userExists.value = false // Скидаємо значення для перевірки існуючого користувача при зміні згоди
   }
 })
 
@@ -240,5 +259,6 @@ function onSignUpReset() {
   showSignUpPassword.value = false
   showSignUpRepeatPassword.value = false
   formSubmitted.value = false // Скидаємо флаг сабміту форми
+  userExists.value = false // Скидаємо значення для перевірки існуючого користувача
 }
 </script>
