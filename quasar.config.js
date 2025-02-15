@@ -3,6 +3,10 @@
 
 import { defineConfig } from '#q-app/wrappers'
 import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export default defineConfig((ctx) => {
   return {
@@ -80,7 +84,7 @@ export default defineConfig((ctx) => {
           'vite-plugin-checker',
           {
             eslint: {
-              lintCommand: 'eslint -c ./eslint.config.js "./src*/**/*.{js,mjs,cjs,vue}"',
+              lintCommand: `eslint -c ${resolve(__dirname, 'eslint.config.js')} "${resolve(__dirname, 'src')}/**/*.{js,mjs,cjs,vue}"`,
               useFlatConfig: true,
             },
           },
