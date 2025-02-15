@@ -9,7 +9,13 @@
       <q-item-label header> Welcome to App </q-item-label>
 
       <!-- Лінки для залогінених користувачів -->
-      <q-item clickable v-if="isLoggedIn" :key="userLink.title" tag="a" :href="userLink.link">
+      <q-item
+        clickable
+        v-if="isLoggedIn"
+        :key="userLink.title"
+        tag="router-link"
+        :to="userLink.link"
+      >
         <q-item-section avatar>
           <q-avatar v-if="userLink.icon !== 'ion-person'">
             <img :src="userLink.icon" alt="User Image" />
@@ -23,45 +29,60 @@
       </q-item>
 
       <!-- Лінки для незалогінених користувачів -->
-      <EssentialLink
-        v-else
-        :key="loginLink.title"
-        :title="loginLink.title"
-        :caption="loginLink.caption"
-        :icon="loginLink.icon"
-        :link="loginLink.link"
-      />
+      <q-item clickable v-else :key="loginLink.title" tag="router-link" :to="loginLink.link">
+        <q-item-section avatar>
+          <q-icon :name="loginLink.icon" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ loginLink.title }}</q-item-label>
+          <q-item-label caption>{{ loginLink.caption }}</q-item-label>
+        </q-item-section>
+      </q-item>
 
       <q-separator />
 
       <!-- Основні лінки -->
-      <EssentialLink
+      <q-item
         v-for="link in visibleLinksList"
         :key="link.title"
-        :title="link.title"
-        :caption="link.caption"
-        :icon="link.icon"
-        :link="link.link"
-      />
+        clickable
+        tag="router-link"
+        :to="link.link"
+      >
+        <q-item-section avatar>
+          <q-icon :name="link.icon" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ link.title }}</q-item-label>
+          <q-item-label caption>{{ link.caption }}</q-item-label>
+        </q-item-section>
+      </q-item>
 
       <q-separator />
 
       <!-- Додаткові лінки -->
-      <EssentialLink
+      <q-item
         v-for="link in additionalLinksList"
         :key="link.title"
-        :title="link.title"
-        :caption="link.caption"
-        :icon="link.icon"
-        :link="link.link"
-      />
+        clickable
+        tag="a"
+        :href="link.link"
+        target="_blank"
+      >
+        <q-item-section avatar>
+          <q-icon :name="link.icon" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>{{ link.title }}</q-item-label>
+          <q-item-label caption>{{ link.caption }}</q-item-label>
+        </q-item-section>
+      </q-item>
     </q-list>
   </q-drawer>
 </template>
 
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
 
 const props = defineProps({
   open: {
@@ -149,11 +170,9 @@ const additionalLinksList = [
 ]
 
 const visibleLinksList = computed(() => {
-  if (isLoggedIn.value) {
-    return linksList.value
-  } else {
-    return linksList.value.filter((link) => link.title !== 'Cart')
-  }
+  return isLoggedIn.value
+    ? linksList.value
+    : linksList.value.filter((link) => link.title !== 'Cart')
 })
 
 onMounted(() => {
