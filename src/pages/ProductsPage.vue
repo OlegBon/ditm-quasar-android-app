@@ -25,13 +25,13 @@
 
     <div>
       <q-list v-for="product in filteredAndDisplayedProducts" :key="product.id" bordered separator>
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple @click="goToProduct(product.id)">
           <q-item-section class="product-img-section">
             <img class="product-img" alt="Product image" :src="product.thumbnail" loading="lazy" />
           </q-item-section>
           <q-item-section>{{ product.title }}</q-item-section>
           <q-item-section class="button-section">
-            <q-btn v-if="isLoggedIn" color="primary" @click="addToCart(product)">
+            <q-btn v-if="isLoggedIn" color="primary" @click.stop="addToCart(product)">
               <q-icon name="ion-cart" />
             </q-btn>
           </q-item-section>
@@ -43,12 +43,14 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
-import { useCartStore } from '../store/cartStore'
-import { useUserStore } from '../store/userStore'
+import { useCartStore } from 'src/store/cartStore'
+import { useUserStore } from 'src/store/userStore'
 
 const cartStore = useCartStore()
 const userStore = useUserStore()
+const router = useRouter()
 
 const search = ref('')
 const selectedCategory = ref({ label: 'All Products', value: '' })
@@ -133,5 +135,9 @@ function addToCart(product) {
   if (isLoggedIn.value) {
     cartStore.addItem(product)
   }
+}
+
+function goToProduct(productId) {
+  router.push(`/products/${productId}`)
 }
 </script>

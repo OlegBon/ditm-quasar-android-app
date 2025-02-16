@@ -7,7 +7,10 @@ const routes = [
   {
     path: '/products',
     component: () => import('layouts/ProductsLayout.vue'),
-    children: [{ path: '', component: () => import('pages/ProductsPage.vue') }],
+    children: [
+      { path: '', component: () => import('pages/ProductsPage.vue') },
+      { path: ':id', component: () => import('pages/ProductDetailPage.vue') }, // новий маршрут для картки товару
+    ],
   },
   {
     path: '/about',

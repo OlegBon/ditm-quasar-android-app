@@ -17,8 +17,9 @@
 
     <Sidebar v-model:open="leftDrawerOpen" />
 
-    <q-page-container>
-      <router-view />
+    <q-page-container class="custom-page-container">
+      <!-- Додано слот для відображення вмісту сторінки -->
+      <slot></slot>
       <BackToTopButton />
     </q-page-container>
 
