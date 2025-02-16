@@ -3,11 +3,15 @@
     <h1>Cart</h1>
     <q-list>
       <q-item v-for="item in cartItems" :key="item.id" bordered>
-        <q-item-section>
+        <q-item-section clickable @click="goToProduct(item.id)">
           <img :src="item.thumbnail" alt="Product image" class="cart-img" />
         </q-item-section>
-        <q-item-section>{{ item.title }}</q-item-section>
-        <q-item-section>{{ item.price }}</q-item-section>
+        <q-item-section clickable @click="goToProduct(item.id)">
+          {{ item.title }}
+        </q-item-section>
+        <q-item-section clickable @click="goToProduct(item.id)">
+          {{ item.price }}
+        </q-item-section>
         <q-item-section>
           <q-input
             v-model.number="item.quantity"
@@ -17,7 +21,7 @@
           />
         </q-item-section>
         <q-item-section>
-          <q-btn color="negative" @click="removeFromCart(item.id)">
+          <q-btn color="negative" @click.stop="removeFromCart(item.id)">
             <q-icon name="delete" />
           </q-btn>
         </q-item-section>
@@ -30,9 +34,11 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useCartStore } from '../store/cartStore'
 
 const cartStore = useCartStore()
+const router = useRouter()
 
 const cartItems = computed(() => cartStore.items)
 const totalPrice = computed(() => cartStore.totalPrice)
@@ -47,5 +53,9 @@ function clearCart() {
 
 function updateQuantity(productId, quantity) {
   cartStore.updateQuantity(productId, quantity)
+}
+
+function goToProduct(productId) {
+  router.push(`/products/${productId}`)
 }
 </script>
