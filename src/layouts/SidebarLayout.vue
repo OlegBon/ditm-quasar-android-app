@@ -53,7 +53,12 @@
           <q-icon :name="link.icon" />
         </q-item-section>
         <q-item-section>
-          <q-item-label>{{ link.title }}</q-item-label>
+          <q-item-label>
+            {{ link.title }}
+            <q-badge v-if="link.title === 'Cart'" color="red" class="badge-custom">{{
+              uniqueCartItemsCount
+            }}</q-badge>
+          </q-item-label>
           <q-item-label :caption="true">{{ link.caption }}</q-item-label>
         </q-item-section>
       </q-item>
@@ -84,6 +89,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import { useUserStore } from '../store/userStore'
+import { useCartStore } from '../store/cartStore'
 
 const props = defineProps({
   open: {
@@ -96,6 +102,7 @@ const emit = defineEmits(['update:open'])
 
 const drawerOpen = ref(props.open)
 const userStore = useUserStore()
+const cartStore = useCartStore()
 
 watch(
   () => props.open,
@@ -166,4 +173,6 @@ const visibleLinksList = computed(() => {
     ? linksList.value
     : linksList.value.filter((link) => link.title !== 'Cart')
 })
+
+const uniqueCartItemsCount = computed(() => cartStore.items.length)
 </script>
