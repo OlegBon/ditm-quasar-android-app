@@ -101,17 +101,6 @@ onMounted(() => {
   loadCategories()
   loadAllProducts()
   window.addEventListener('scroll', handleScroll)
-
-  // Додаємо прослуховувачі подій до полів вводу
-  document.querySelectorAll('input').forEach((input) => {
-    input.addEventListener('focus', () => {
-      console.log('Поле у фокусі:', input)
-    })
-
-    input.addEventListener('click', () => {
-      input.focus()
-    })
-  })
 })
 
 onBeforeUnmount(() => {
