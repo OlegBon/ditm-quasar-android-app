@@ -47,9 +47,15 @@ h1 {
   color: #1976d2;
 }
 
-.product-img-section {
+.product-img-section,
+.cart-img {
   max-width: 60px;
   margin-right: 20px;
+}
+
+.button-section {
+  max-width: 60px;
+  margin-left: 20px;
 }
 
 .product-img {
@@ -58,7 +64,7 @@ h1 {
 
 .back-to-top {
   position: fixed;
-  right: 16px;
+  right: 45%;
   bottom: 80px; /* Поруч з футером */
 }
 
@@ -74,4 +80,10 @@ h1 {
 
 .q-header {
   padding-top: 20px;
+}
+
+.total-price {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 40px;
 }

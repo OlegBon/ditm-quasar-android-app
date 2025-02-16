@@ -30,6 +30,11 @@
             <img class="product-img" alt="Product image" :src="product.thumbnail" loading="lazy" />
           </q-item-section>
           <q-item-section>{{ product.title }}</q-item-section>
+          <q-item-section class="button-section">
+            <q-btn v-if="isLoggedIn" color="primary" @click="addToCart(product)">
+              <q-icon name="ion-cart" />
+            </q-btn>
+          </q-item-section>
         </q-item>
       </q-list>
     </div>
@@ -39,13 +44,20 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { api } from 'boot/axios'
+import { useCartStore } from '../store/cartStore'
+import { useUserStore } from '../store/userStore'
+
+const cartStore = useCartStore()
+const userStore = useUserStore()
 
 const search = ref('')
-const selectedCategory = ref({ label: 'All Products', value: '' }) // Початково обираємо всі продукти
+const selectedCategory = ref({ label: 'All Products', value: '' })
 const allProducts = ref([])
 const categories = ref([])
 const limit = ref(30)
 const page = ref(1)
+
+const isLoggedIn = computed(() => userStore.isLoggedIn)
 
 const productCount = computed(() => {
   if (search.value) {
@@ -63,7 +75,6 @@ const filteredAndDisplayedProducts = computed(() => {
 
   if (selectedCategory.value.value !== '') {
     const categoryValue = selectedCategory.value.value
-    // console.log('Filtering by category:', categoryValue)
 
     if (categoryValue) {
       filteredProducts = filteredProducts.filter((product) => product.category === categoryValue)
@@ -79,16 +90,13 @@ const filteredAndDisplayedProducts = computed(() => {
   return filteredProducts.slice(0, page.value * limit.value)
 })
 
-const categoryOptions = computed(() => [
-  { label: 'All Products', value: '' }, // Значення для "всіх продуктів"
-  ...categories.value,
-])
+const categoryOptions = computed(() => [{ label: 'All Products', value: '' }, ...categories.value])
 
 async function loadCategories() {
   const { data } = await api('https://dummyjson.com/products/categories')
   categories.value = data.map((category) => ({
-    label: category.name, // Відображається у select
-    value: category.slug, // Використовується для фільтрації
+    label: category,
+    value: category,
   }))
 }
 
@@ -119,5 +127,11 @@ function loadMore() {
 
 function clearSearch() {
   search.value = ''
+}
+
+function addToCart(product) {
+  if (isLoggedIn.value) {
+    cartStore.addItem(product)
+  }
 }
 </script>
