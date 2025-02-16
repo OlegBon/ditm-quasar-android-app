@@ -33,10 +33,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed } from 'vue'
+import { useUserStore } from '../store/userStore'
 import Sidebar from './SidebarLayout.vue'
 import { getCurrentDate } from '../utils/date'
-import BackToTopButton from '../components/BackToTopButton.vue' // Імпорт компонента
+import BackToTopButton from '../components/BackToTopButton.vue'
 
 const { title } = defineProps({
   title: {
@@ -46,21 +47,13 @@ const { title } = defineProps({
 })
 
 const leftDrawerOpen = ref(false)
-const isLoggedIn = ref(false)
+const userStore = useUserStore()
+
+const isLoggedIn = computed(() => !!userStore.user)
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
-// Отримуємо поточну дату з utils/date.js
 const currentDate = ref(getCurrentDate())
-
-function checkLoggedIn() {
-  const loggedInUser = localStorage.getItem('loggedInUser')
-  isLoggedIn.value = !!loggedInUser
-}
-
-onMounted(() => {
-  checkLoggedIn()
-})
 </script>

@@ -24,7 +24,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ userLink.title }}</q-item-label>
-          <q-item-label caption>{{ userLink.caption }}</q-item-label>
+          <q-item-label :caption="true">{{ userLink.caption }}</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -35,7 +35,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ loginLink.title }}</q-item-label>
-          <q-item-label caption>{{ loginLink.caption }}</q-item-label>
+          <q-item-label :caption="true">{{ loginLink.caption }}</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -54,7 +54,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ link.title }}</q-item-label>
-          <q-item-label caption>{{ link.caption }}</q-item-label>
+          <q-item-label :caption="true">{{ link.caption }}</q-item-label>
         </q-item-section>
       </q-item>
 
@@ -74,7 +74,7 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ link.title }}</q-item-label>
-          <q-item-label caption>{{ link.caption }}</q-item-label>
+          <q-item-label :caption="true">{{ link.caption }}</q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
@@ -82,7 +82,8 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
+import { useUserStore } from '../store/userStore'
 
 const props = defineProps({
   open: {
@@ -94,8 +95,7 @@ const props = defineProps({
 const emit = defineEmits(['update:open'])
 
 const drawerOpen = ref(props.open)
-const isLoggedIn = ref(false)
-const user = ref(null)
+const userStore = useUserStore()
 
 watch(
   () => props.open,
@@ -109,16 +109,6 @@ function updateDrawerOpen(value) {
   emit('update:open', value)
 }
 
-function checkLoggedIn() {
-  const loggedInUser = localStorage.getItem('loggedInUser')
-  if (loggedInUser) {
-    user.value = JSON.parse(loggedInUser)
-    isLoggedIn.value = true
-  } else {
-    isLoggedIn.value = false
-  }
-}
-
 const loginLink = {
   title: 'Login',
   caption: 'Sign In',
@@ -127,11 +117,13 @@ const loginLink = {
 }
 
 const userLink = computed(() => ({
-  title: user.value?.username || 'User',
-  caption: user.value?.email || '',
-  icon: user.value?.image || 'ion-person',
+  title: userStore.user?.username || 'User',
+  caption: userStore.user?.email || '',
+  icon: userStore.user?.image || 'ion-person',
   link: '/user',
 }))
+
+const isLoggedIn = computed(() => !!userStore.user)
 
 const linksList = ref([
   {
@@ -173,9 +165,5 @@ const visibleLinksList = computed(() => {
   return isLoggedIn.value
     ? linksList.value
     : linksList.value.filter((link) => link.title !== 'Cart')
-})
-
-onMounted(() => {
-  checkLoggedIn()
 })
 </script>

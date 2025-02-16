@@ -23,7 +23,6 @@
               lazy-rules
               :rules="emailRules"
             />
-
             <q-input
               filled
               :type="showSignInPassword ? 'text' : 'password'"
@@ -40,9 +39,7 @@
                 />
               </template>
             </q-input>
-
             <div v-if="loginError" class="text-negative">Invalid email or password</div>
-
             <div>
               <q-btn label="Sign In" type="submit" color="primary" />
               <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
@@ -68,7 +65,6 @@
               lazy-rules
               :rules="emailRules"
             />
-
             <q-input
               filled
               :type="showSignUpPassword ? 'text' : 'password'"
@@ -85,7 +81,6 @@
                 />
               </template>
             </q-input>
-
             <q-input
               filled
               :type="showSignUpRepeatPassword ? 'text' : 'password'"
@@ -102,13 +97,11 @@
                 />
               </template>
             </q-input>
-
             <q-toggle v-model="signUpAccept" label="I accept the license and terms" />
             <div v-if="formSubmitted && !signUpAccept.value" class="text-negative">
               You must accept the license and terms
             </div>
             <div v-if="userExists" class="text-negative">User already exists</div>
-
             <div>
               <q-btn label="Sign Up" type="submit" color="primary" />
               <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
@@ -123,12 +116,14 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../store/userStore'
 import axios from 'axios'
 
+const userStore = useUserStore()
 const activeTab = ref('signIn')
 const formSubmitted = ref(false)
-const loginError = ref(false) // Додаємо змінну для перевірки помилок логіну
-const userExists = ref(false) // Додаємо змінну для перевірки існуючого користувача
+const loginError = ref(false)
+const userExists = ref(false)
 
 // Змінні для форми Sign In
 const signInEmail = ref('')
@@ -177,25 +172,20 @@ const signInForm = ref(null)
 const router = useRouter()
 
 async function onSignInSubmit() {
-  // Виконуємо валідацію перед сабмітом
   signInForm.value.validate().then(async (isValid) => {
     if (isValid) {
-      // Логіка сабміту форми Sign In
       const { data } = await axios.get('https://dummyjson.com/users')
       const user = data.users.find(
         (user) => user.email === signInEmail.value && user.password === signInPassword.value,
       )
       if (user) {
         loginError.value = false
-        // Отримуємо дані користувача за ID
         const userDetail = await axios.get(`https://dummyjson.com/users/${user.id}`)
-        localStorage.setItem('loggedInUser', JSON.stringify(userDetail.data))
+        userStore.login(userDetail.data)
         router.push('/user')
       } else {
         loginError.value = true
       }
-    } else {
-      console.log('Validation failed')
     }
   })
 }
@@ -210,18 +200,15 @@ function onSignInReset() {
 const signUpForm = ref(null)
 
 async function onSignUpSubmit() {
-  formSubmitted.value = true // Встановлюємо флаг сабміту форми
-  userExists.value = false // Скидаємо значення для перевірки існуючого користувача
+  formSubmitted.value = true
+  userExists.value = false
 
-  // Перевірка поля accept перед відправленням форми
   if (!signUpAccept.value) {
     return
   }
 
-  // Виконуємо валідацію перед сабмітом
   signUpForm.value.validate().then(async (isValid) => {
     if (isValid) {
-      // Перевірка наявності email серед існуючих користувачів
       const { data } = await axios.get('https://dummyjson.com/users')
       const existingUser = data.users.find((user) => user.email === signUpEmail.value)
 
@@ -229,25 +216,22 @@ async function onSignUpSubmit() {
         userExists.value = true
       } else {
         userExists.value = false
-        // Додаємо користувача до локального сховища
         const newUser = {
           email: signUpEmail.value,
           password: signUpPassword.value,
         }
-        localStorage.setItem('loggedInUser', JSON.stringify(newUser))
+        userStore.login(newUser)
         router.push('/user')
       }
 
-      formSubmitted.value = false // Скидаємо флаг сабміту форми після успішної валідації
-    } else {
-      console.log('Validation failed')
+      formSubmitted.value = false
     }
   })
 }
 
 watch(signUpAccept, (newVal) => {
   if (newVal) {
-    userExists.value = false // Скидаємо значення для перевірки існуючого користувача при зміні згоди
+    userExists.value = false
   }
 })
 
@@ -258,7 +242,7 @@ function onSignUpReset() {
   signUpAccept.value = false
   showSignUpPassword.value = false
   showSignUpRepeatPassword.value = false
-  formSubmitted.value = false // Скидаємо флаг сабміту форми
-  userExists.value = false // Скидаємо значення для перевірки існуючого користувача
+  formSubmitted.value = false
+  userExists.value = false
 }
 </script>

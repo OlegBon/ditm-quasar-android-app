@@ -24,26 +24,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../store/userStore'
 
-const user = ref(null)
+const userStore = useUserStore()
 const router = useRouter()
 
-function checkUser() {
-  const loggedInUser = localStorage.getItem('loggedInUser')
-  if (loggedInUser) {
-    user.value = JSON.parse(loggedInUser)
-  }
-}
+const user = computed(() => userStore.user)
 
 function logout() {
-  localStorage.removeItem('loggedInUser')
-  user.value = null
+  userStore.logout()
   router.push('/login')
 }
-
-onMounted(() => {
-  checkUser()
-})
 </script>
