@@ -8,7 +8,7 @@
     <q-tab-panels v-model="activeTab" class="login-panels">
       <q-tab-panel name="signIn">
         <h1>Sign In</h1>
-        <div class="q-pa-md" style="max-width: 400px">
+        <div class="q-pa-md block-center" style="max-width: 400px">
           <q-form
             ref="signInForm"
             @submit.prevent="onSignInSubmit"
@@ -50,7 +50,7 @@
 
       <q-tab-panel name="signUp">
         <h1>Sign Up</h1>
-        <div class="q-pa-md" style="max-width: 400px">
+        <div class="q-pa-md block-center" style="max-width: 400px">
           <q-form
             ref="signUpForm"
             @submit.prevent="onSignUpSubmit"
