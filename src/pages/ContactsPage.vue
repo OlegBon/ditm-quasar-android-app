@@ -1,17 +1,27 @@
 <template>
   <q-page padding>
     <h1>Our Contacts</h1>
-    <p class="p-16">
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit odit non aut, praesentium
-      explicabo eligendi quaerat assumenda dolor tempora quae omnis quasi molestias? Nobis enim
-      omnis laudantium. Distinctio, in ea, officia laborum possimus facere dolor fugiat quas nostrum
-      nobis rem? Provident laboriosam porro veniam aspernatur fugit. Blanditiis, illo aperiam ad
-      earum commodi voluptatum cum consequuntur mollitia tempore dolor. Incidunt vel doloribus ad
-      nesciunt sed ipsum quas, sapiente, maxime assumenda illum inventore asperiores quisquam
-      perferendis quis dolorem quaerat impedit velit facere deserunt expedita. Omnis aspernatur
-      quas, maiores est nesciunt illo, minus cupiditate ab ipsum sapiente saepe. Ad voluptatibus
-      rerum iste porro.
-    </p>
+    <img
+      class="home-img"
+      alt="Quasar logo"
+      src="~assets/contacts-map.jpg"
+      style="width: 100%; height: 100%"
+    />
+    <div class="q-pa-md padding-0 any-link">
+      <q-list bordered separator>
+        <q-item clickable v-ripple>
+          <q-item-section>Phone: <a href="tel:+380971234567">+380 97 123 4567</a></q-item-section>
+        </q-item>
+        <q-item clickable v-ripple>
+          <q-item-section>Email: <a href="mailto:info@app.com">info@app.com</a></q-item-section>
+        </q-item>
+        <q-item clickable v-ripple>
+          <q-item-section
+            >WhatsApp: <a href="https://wa.me/380971234567">+380 97 123 4567</a></q-item-section
+          >
+        </q-item>
+      </q-list>
+    </div>
   </q-page>
 </template>
 

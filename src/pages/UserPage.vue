@@ -8,13 +8,42 @@
       <div v-else>
         <q-icon name="ion-person" size="100px" />
       </div>
-      <p>First Name: {{ user.firstName || 'First Name is empty. Please update.' }}</p>
-      <p>Last Name: {{ user.lastName || 'Last Name is empty. Please update.' }}</p>
-      <p>Email: {{ user.email }}</p>
-      <p>Username: {{ user.username || 'User' }}</p>
-      <p>Company: {{ user.company?.name || 'Company information is empty. Please update.' }}</p>
-      <p>Role: {{ user.role || 'Role information is empty. Please update.' }}</p>
-      <q-btn label="Log Out" @click="logout" color="primary" />
+      <div class="q-pa-md padding-0">
+        <q-list bordered separator>
+          <q-item clickable v-ripple>
+            <q-item-section
+              >First Name:
+              {{ user.firstName || 'First Name is empty. Please update.' }}</q-item-section
+            >
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section
+              >Last Name:
+              {{ user.lastName || 'Last Name is empty. Please update.' }}</q-item-section
+            >
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section>Email: {{ user.email }}</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section>Username: {{ user.username || 'User' }}</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section
+              >Company:
+              {{
+                user.company?.name || 'Company information is empty. Please update.'
+              }}</q-item-section
+            >
+          </q-item>
+          <q-item clickable v-ripple>
+            <q-item-section
+              >Role: {{ user.role || 'Role information is empty. Please update.' }}</q-item-section
+            >
+          </q-item>
+        </q-list>
+      </div>
+      <q-btn class="q-mt-md" label="Log Out" @click="logout" color="primary" />
     </div>
     <div v-else>
       <h1>Hello!</h1>
