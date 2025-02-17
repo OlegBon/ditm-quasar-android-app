@@ -84,7 +84,7 @@ export default defineConfig((ctx) => {
           'vite-plugin-checker',
           {
             eslint: {
-              lintCommand: `eslint -c ${resolve(__dirname, 'eslint.config.js')} "${resolve(__dirname, 'src')}/**/*.{js,mjs,cjs,vue}"`,
+              lintCommand: `eslint -c "${resolve(__dirname, 'eslint.config.js')}" "${resolve(__dirname, 'src')}/**/*.{js,mjs,cjs,vue}"`,
               useFlatConfig: true,
             },
           },
