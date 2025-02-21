@@ -103,8 +103,10 @@ async function loadCategories() {
 }
 
 async function loadAllProducts() {
-  const { data } = await api('https://dummyjson.com/products?limit=0')
-  allProducts.value = data.products
+  // const { data } = await api('https://dummyjson.com/products?limit=0')
+  const { data } = await api('http://127.0.0.1:8000/api/products')
+  // allProducts.value = data.products
+  allProducts.value = data
 }
 
 onMounted(() => {
