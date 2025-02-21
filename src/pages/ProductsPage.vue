@@ -45,8 +45,8 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
-import { useCartStore } from 'src/store/cartStore'
-import { useUserStore } from 'src/store/userStore'
+import { useCartStore } from '../store/cartStore'
+import { useUserStore } from '../store/userStore'
 
 const cartStore = useCartStore()
 const userStore = useUserStore()
@@ -97,8 +97,8 @@ const categoryOptions = computed(() => [{ label: 'All Products', value: '' }, ..
 async function loadCategories() {
   const { data } = await api('https://dummyjson.com/products/categories')
   categories.value = data.map((category) => ({
-    label: category,
-    value: category,
+    label: category.name,
+    value: category.slug,
   }))
 }
 
