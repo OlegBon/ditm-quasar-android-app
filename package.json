@@ -1,8 +1,8 @@
 {
   "name": "quasar-project",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "description": "App for Android",
+  "productName": "Shop App - Android",
   "author": "OlegBon <oleg_bon@ukr.net>",
   "type": "module",
   "private": true,

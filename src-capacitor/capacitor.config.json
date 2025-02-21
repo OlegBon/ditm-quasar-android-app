@@ -1,5 +1,5 @@
 {
-  "appId": "web.app.quasar",
-  "appName": "Quasar App",
+  "appId": "android.quasar.app",
+  "appName": "Shop App - Android",
   "webDir": "www"
 }

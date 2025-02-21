@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "web.app.quasar"
+    namespace "android.quasar.app"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "web.app.quasar"
+        applicationId "android.quasar.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -24,16 +24,10 @@ android {
     }
 }
 
-// repositories {
-//     flatDir{
-//         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
-//     }
-// }
-
 repositories {
-    google()
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
 }
 
 dependencies {

@@ -1,4 +1,4 @@
-package web.app.quasar;
+package android.quasar.app;
 
 import com.getcapacitor.BridgeActivity;
 
