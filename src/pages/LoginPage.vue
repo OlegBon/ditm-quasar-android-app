@@ -174,13 +174,15 @@ const router = useRouter()
 async function onSignInSubmit() {
   signInForm.value.validate().then(async (isValid) => {
     if (isValid) {
-      const { data } = await axios.get('https://dummyjson.com/users')
+      // const { data } = await axios.get('https://dummyjson.com/users')
+      const { data } = await axios.get('https://testbackend.bon.kharkov.ua/api/users')
       const user = data.users.find(
         (user) => user.email === signInEmail.value && user.password === signInPassword.value,
       )
       if (user) {
         loginError.value = false
-        const userDetail = await axios.get(`https://dummyjson.com/users/${user.id}`)
+        // const userDetail = await axios.get(`https://dummyjson.com/users/${user.id}`)
+        const userDetail = await axios.get(`https://testbackend.bon.kharkov.ua/api/user/[id]`)
         userStore.login(userDetail.data)
         router.push('/user')
       } else {
@@ -209,7 +211,8 @@ async function onSignUpSubmit() {
 
   signUpForm.value.validate().then(async (isValid) => {
     if (isValid) {
-      const { data } = await axios.get('https://dummyjson.com/users')
+      // const { data } = await axios.get('https://dummyjson.com/users')
+      const { data } = await axios.get('https://testbackend.bon.kharkov.ua/api/users')
       const existingUser = data.users.find((user) => user.email === signUpEmail.value)
 
       if (existingUser) {
