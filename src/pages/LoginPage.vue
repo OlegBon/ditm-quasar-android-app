@@ -45,6 +45,11 @@
               <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
             </div>
           </q-form>
+          <!-- <div v-if="errorMessages.length" class="error-box q-mt-md bigger-alert">
+            <ul>
+              <li v-for="(msg, i) in errorMessages" :key="i">{{ msg }}</li>
+            </ul>
+          </div> -->
         </div>
       </q-tab-panel>
 
@@ -107,6 +112,11 @@
               <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
             </div>
           </q-form>
+          <!-- <div v-if="errorMessages.length" class="error-box q-mt-md bigger-alert">
+            <ul>
+              <li v-for="(msg, i) in errorMessages" :key="i">{{ msg }}</li>
+            </ul>
+          </div> -->
         </div>
       </q-tab-panel>
     </q-tab-panels>
@@ -116,10 +126,10 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../store/userStore'
+// import { useUserStore } from '../store/userStore'
 import axios from 'axios'
 
-const userStore = useUserStore()
+// const userStore = useUserStore()
 const activeTab = ref('signIn')
 const formSubmitted = ref(false)
 const loginError = ref(false)
@@ -171,19 +181,25 @@ function toggleShowSignUpRepeatPassword() {
 const signInForm = ref(null)
 const router = useRouter()
 
+// const errorMessages = ref([])
+
 async function onSignInSubmit() {
+  // errorMessages.value = []
   signInForm.value.validate().then(async (isValid) => {
     if (isValid) {
       // const { data } = await axios.get('https://dummyjson.com/users')
-      const { data } = await axios.get('https://testbackend.bon.kharkov.ua/api/users')
+      const { data } = await axios.get('http://127.0.0.1:8000/api/users')
+      // const { data } = await axios.get('https://testbackend.bon.kharkov.ua/api/users')
       const user = data.users.find(
         (user) => user.email === signInEmail.value && user.password === signInPassword.value,
       )
       if (user) {
         loginError.value = false
         // const userDetail = await axios.get(`https://dummyjson.com/users/${user.id}`)
-        const userDetail = await axios.get(`https://testbackend.bon.kharkov.ua/api/user/[id]`)
-        userStore.login(userDetail.data)
+        const userDetail = await axios.get(`http://127.0.0.1:8000/api/user/[id]`)
+        // const userDetail = await axios.get(`https://testbackend.bon.kharkov.ua/api/user/[id]`)
+        // userStore.login(userDetail.data)
+
         router.push('/user')
       } else {
         loginError.value = true
@@ -202,6 +218,7 @@ function onSignInReset() {
 const signUpForm = ref(null)
 
 async function onSignUpSubmit() {
+  // errorMessages.value = []
   formSubmitted.value = true
   userExists.value = false
 
@@ -212,7 +229,8 @@ async function onSignUpSubmit() {
   signUpForm.value.validate().then(async (isValid) => {
     if (isValid) {
       // const { data } = await axios.get('https://dummyjson.com/users')
-      const { data } = await axios.get('https://testbackend.bon.kharkov.ua/api/users')
+      const { data } = await axios.get('http://127.0.0.1:8000/api/users')
+      // const { data } = await axios.get('https://testbackend.bon.kharkov.ua/api/users')
       const existingUser = data.users.find((user) => user.email === signUpEmail.value)
 
       if (existingUser) {
@@ -223,11 +241,38 @@ async function onSignUpSubmit() {
           email: signUpEmail.value,
           password: signUpPassword.value,
         }
-        userStore.login(newUser)
-        router.push('/user')
+        // userStore.login(newUser)
+        axios
+          .post('http://127.0.0.1:8000/api/register', {
+            email: newUser.email,
+            password: newUser.password,
+          })
+          .then((response) => {
+            console.log('Registration success:', response.data)
+            if (response.data.token) {
+              localStorage.setItem('api_token', response.data.token)
+            }
+            router.push('/user')
+          })
+          // .catch((error) => {
+          //   console.error('Registration error:', error.response?.data || error)
+          //   if (error.response?.status === 422) {
+          //     const allErrors = error.response.data.errors || {}
+          //     let combined = []
+          //     for (const field in allErrors) {
+          //       combined = combined.concat(allErrors[field])
+          //     }
+          //     errorMessages.value = combined
+          //   } else if (error.response?.status === 401) {
+          //     errorMessages.value = ['You are not authorized to register.']
+          //   } else {
+          //     errorMessages.value = ['Something went wrong. Please try again.']
+          //   }
+          // })
+          .finally(() => {
+            formSubmitted.value = false
+          })
       }
-
-      formSubmitted.value = false
     }
   })
 }
