@@ -89,10 +89,10 @@
 <script setup>
 import { ref, watch, computed, onMounted } from 'vue'
 import { useCartStore } from '../store/cartStore'
-import { user, fetchUser } from '../utils/userService'
+import { tryFetchUser, user } from '../utils/userService'
 
 onMounted(() => {
-  fetchUser().catch((error) => console.error('Failed to fetch user:', error))
+  tryFetchUser()
 })
 
 const props = defineProps({
@@ -133,7 +133,7 @@ const userLink = computed(() => ({
   link: '/user',
 }))
 
-const isLoggedIn = computed(() => !!localStorage.getItem('api_token'))
+const isLoggedIn = computed(() => !!user.value)
 
 const linksList = ref([
   {

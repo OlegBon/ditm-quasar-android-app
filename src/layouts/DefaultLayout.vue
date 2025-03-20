@@ -40,12 +40,16 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useUserStore } from '../store/userStore'
+import { ref, computed, onMounted } from 'vue'
 import { useCartStore } from '../store/cartStore'
 import Sidebar from './SidebarLayout.vue'
 import { getCurrentDate } from '../utils/date'
 import BackToTopButton from '../components/BackToTopButton.vue'
+import { tryFetchUser, user } from '../utils/userService'
+
+onMounted(() => {
+  tryFetchUser()
+})
 
 const { title } = defineProps({
   title: {
@@ -55,10 +59,9 @@ const { title } = defineProps({
 })
 
 const leftDrawerOpen = ref(false)
-const userStore = useUserStore()
 const cartStore = useCartStore()
 
-const isLoggedIn = computed(() => !!userStore.user)
+const isLoggedIn = computed(() => !!user.value)
 const uniqueCartItemsCount = computed(() => cartStore.items.length)
 
 function toggleLeftDrawer() {

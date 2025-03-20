@@ -46,10 +46,13 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCartStore } from '../store/cartStore'
-import { useUserStore } from '../store/userStore'
+import { tryFetchUser, user } from '../utils/userService'
+
+onMounted(() => {
+  tryFetchUser()
+})
 
 const cartStore = useCartStore()
-const userStore = useUserStore()
 const router = useRouter()
 
 const search = ref('')
@@ -59,7 +62,7 @@ const categories = ref([])
 const limit = ref(30)
 const page = ref(1)
 
-const isLoggedIn = computed(() => userStore.isLoggedIn)
+const isLoggedIn = computed(() => !!user.value)
 
 const productCount = computed(() => {
   if (search.value) {

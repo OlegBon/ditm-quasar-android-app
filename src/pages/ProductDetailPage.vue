@@ -41,14 +41,17 @@ import { api } from 'boot/axios'
 import { useRoute } from 'vue-router'
 import ProductDetailLayout from 'layouts/ProductDetailLayout.vue'
 import { useCartStore } from 'src/store/cartStore'
-import { useUserStore } from 'src/store/userStore' // імпортуємо userStore
+import { tryFetchUser, user } from '../utils/userService'
+
+onMounted(() => {
+  tryFetchUser()
+})
 
 const route = useRoute()
 const cartStore = useCartStore()
-const userStore = useUserStore() // використовуємо userStore
 
 const product = ref({})
-const isLoggedIn = computed(() => userStore.isLoggedIn) // визначаємо isLoggedIn
+const isLoggedIn = computed(() => !!user.value)
 
 onMounted(async () => {
   const { data } = await api(`https://dummyjson.com/products/${route.params.id}`)
