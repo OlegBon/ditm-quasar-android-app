@@ -1,69 +1,84 @@
 <template>
-  <q-page padding>
-    <div v-if="user">
-      <h1>Hello, {{ user.firstName || 'New User' }}!</h1>
-      <div v-if="user.image">
-        <img :src="user.image" alt="User Image" />
-      </div>
-      <div v-else>
-        <q-icon name="ion-person" size="100px" />
-      </div>
-      <div class="q-pa-md padding-0">
-        <q-list bordered separator>
-          <q-item clickable v-ripple>
-            <q-item-section
-              >First Name:
-              {{ user.firstName || 'First Name is empty. Please update.' }}</q-item-section
-            >
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section
-              >Last Name:
-              {{ user.lastName || 'Last Name is empty. Please update.' }}</q-item-section
-            >
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section>Email: {{ user.email }}</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section>Username: {{ user.username || 'User' }}</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section
-              >Company:
-              {{
-                user.company?.name || 'Company information is empty. Please update.'
-              }}</q-item-section
-            >
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section
-              >Role: {{ user.role || 'Role information is empty. Please update.' }}</q-item-section
-            >
-          </q-item>
-        </q-list>
-      </div>
-      <q-btn class="q-mt-md" label="Log Out" @click="logout" color="primary" />
+  <q-page padding class="flex column items-center">
+    <h1>User Page</h1>
+    <div style="max-width: 400px; margin-top: 40px" class="q-mx-auto">
+      <p class="big-text text-center">Hello, {{ userName }}</p>
+      <p class="big-text text-center">Your email: {{ userEmail }}</p>
     </div>
-    <div v-else>
-      <h1>Hello!</h1>
-      <p>Please Sign In.</p>
-    </div>
+
+    <q-btn label="Logout" color="primary" class="q-mt-md" @click="logout" />
   </q-page>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../store/userStore'
 
-const userStore = useUserStore()
+// Поля для імені та email
+const userName = ref('')
+const userEmail = ref('')
+
+// Роутер для перенаправлення
 const router = useRouter()
 
-const user = computed(() => userStore.user)
+onMounted(() => {
+  loadProfile()
+})
+
+function loadProfile() {
+  const token = localStorage.getItem('api_token')
+  if (!token) {
+    // Немає токена -> логін
+    router.push('/login')
+    return
+  }
+
+  // Робимо запит /api/current-user
+  axios
+    .get('http://127.0.0.1:8000/api/current-user', {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    })
+    .then((response) => {
+      // Сервер поверне { id, name, email }
+      userName.value = response.data.name
+      userEmail.value = response.data.email
+    })
+    .catch((error) => {
+      console.error('Error fetching profile:', error.response?.data || error)
+      // Якщо токен недійсний (401), видаляємо токен і відправляємо на логін
+      if (error.response?.status === 401) {
+        localStorage.removeItem('api_token')
+        router.push('/login')
+      }
+    })
+}
 
 function logout() {
-  userStore.logout()
-  router.push('/login')
+  const token = localStorage.getItem('api_token')
+  if (!token) {
+    router.push('/login')
+    return
+  }
+
+  // Викликаємо POST /api/logout
+  axios
+    .post('http://127.0.0.1:8000/api/logout', null, {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    })
+    .then((response) => {
+      console.log('Logout success:', response.data)
+      // Видаляємо токен на фронтенді
+      localStorage.removeItem('api_token')
+      // Переходимо на логін
+      router.push('/login')
+    })
+    .catch((error) => {
+      console.error('Logout error:', error.response?.data || error)
+    })
 }
 </script>

@@ -87,9 +87,13 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue'
-import { useUserStore } from '../store/userStore'
+import { ref, watch, computed, onMounted } from 'vue'
 import { useCartStore } from '../store/cartStore'
+import { user, fetchUser } from '../utils/userService'
+
+onMounted(() => {
+  fetchUser().catch((error) => console.error('Failed to fetch user:', error))
+})
 
 const props = defineProps({
   open: {
@@ -101,7 +105,6 @@ const props = defineProps({
 const emit = defineEmits(['update:open'])
 
 const drawerOpen = ref(props.open)
-const userStore = useUserStore()
 const cartStore = useCartStore()
 
 watch(
@@ -124,13 +127,13 @@ const loginLink = {
 }
 
 const userLink = computed(() => ({
-  title: userStore.user?.username || 'User',
-  caption: userStore.user?.email || '',
-  icon: userStore.user?.image || 'ion-person',
+  title: user.value?.name || 'User',
+  caption: user.value?.email || '',
+  icon: 'ion-person',
   link: '/user',
 }))
 
-const isLoggedIn = computed(() => !!userStore.user)
+const isLoggedIn = computed(() => !!localStorage.getItem('api_token'))
 
 const linksList = ref([
   {
