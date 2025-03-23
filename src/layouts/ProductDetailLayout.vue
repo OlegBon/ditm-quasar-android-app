@@ -6,17 +6,34 @@
 
         <q-toolbar-title> {{ title }} </q-toolbar-title>
         <div>{{ currentDate }}</div>
+        <LanguageSwitcher />
       </q-toolbar>
 
       <q-tabs>
-        <q-route-tab icon="ion-basket" to="/products" replace label="Products" />
+        <q-route-tab
+          icon="ion-basket"
+          to="/products"
+          replace
+          :label="$t('content.layoutProductDefault.tabProducts')"
+        />
         <q-route-tab v-if="isLoggedIn">
           <div class="cart-icon-wrapper">
-            <q-route-tab icon="ion-cart" to="/cart" replace label="Cart" />
+            <q-route-tab
+              icon="ion-cart"
+              to="/cart"
+              replace
+              :label="$t('content.layoutProductDefault.tabCart')"
+            />
             <q-badge color="red" floating>{{ uniqueCartItemsCount }}</q-badge>
           </div>
         </q-route-tab>
-        <q-route-tab v-else icon="login" to="/login" replace label="Login" />
+        <q-route-tab
+          v-else
+          icon="login"
+          to="/login"
+          replace
+          :label="$t('content.layoutProductDefault.tabLogin')"
+        />
       </q-tabs>
     </q-header>
 
@@ -32,7 +49,10 @@
       <q-toolbar>
         <q-toolbar-title>
           <div class="footer">
-            @2025 - All right reserved - <router-link class="link-footer" to="/">Home</router-link>
+            @2025 - {{ $t('content.layoutProductDefault.copyright') }} -
+            <router-link class="link-footer" to="/">{{
+              $t('content.layoutProductDefault.linkHome')
+            }}</router-link>
           </div>
         </q-toolbar-title>
       </q-toolbar>
@@ -48,6 +68,7 @@ import Sidebar from './SidebarLayout.vue'
 import { getCurrentDate } from '../utils/date'
 import BackToTopButton from '../components/BackToTopButton.vue'
 import { tryFetchUser, user } from '../utils/userService'
+import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 
 onMounted(() => {
   tryFetchUser()

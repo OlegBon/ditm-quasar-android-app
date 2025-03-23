@@ -12,24 +12,32 @@
 
         <q-card-section>
           <div>{{ product.description }}</div>
-          <div class="text-top">Brand: {{ product.brand }}</div>
-          <div class="text-top">SKU: {{ product.sku }}</div>
-          <div class="text-top">Rating: {{ product.rating }}</div>
-          <div class="text-top">Status: {{ product.availabilityStatus }}</div>
-          <div class="text-top">Return: {{ product.returnPolicy }}</div>
-          <div class="text-top">Warranty: {{ product.warrantyInformation }}</div>
-          <div class="text-subtitle2 text-top">Price: {{ product.price }}</div>
+          <div class="text-top">{{ $t('content.productDetail.brand') }} {{ product.brand }}</div>
+          <div class="text-top">{{ $t('content.productDetail.sku') }} {{ product.sku }}</div>
+          <div class="text-top">{{ $t('content.productDetail.rating') }} {{ product.rating }}</div>
+          <div class="text-top">
+            {{ $t('content.productDetail.status') }} {{ product.availabilityStatus }}
+          </div>
+          <div class="text-top">
+            {{ $t('content.productDetail.return') }} {{ product.returnPolicy }}
+          </div>
+          <div class="text-top">
+            {{ $t('content.productDetail.warranty') }} {{ product.warrantyInformation }}
+          </div>
+          <div class="text-subtitle2 text-top">
+            {{ $t('content.productDetail.price') }} {{ product.price }}
+          </div>
         </q-card-section>
 
         <q-card-actions align="right">
           <q-btn v-if="isLoggedIn" color="primary" @click="addToCart(product)">
             <q-icon name="ion-cart" />
-            <span>Add to Cart</span>
+            <span>{{ $t('content.productDetail.btnAddToCart') }}</span>
           </q-btn>
         </q-card-actions>
       </q-card>
       <q-card v-else>
-        <q-card-section> Loading product information... </q-card-section>
+        <q-card-section> {{ $t('content.productDetail.loadingTxt') }} </q-card-section>
       </q-card>
     </q-page>
   </ProductDetailLayout>

@@ -1,20 +1,20 @@
 <template>
   <q-page padding>
     <q-tabs v-model="activeTab" class="login-tabs">
-      <q-tab name="signIn" label="Sign In" />
-      <q-tab name="signUp" label="Sign Up" />
+      <q-tab name="signIn" :label="$t('content.login.tabSignIn')" />
+      <q-tab name="signUp" :label="$t('content.login.tabSignUp')" />
     </q-tabs>
 
     <q-tab-panels v-model="activeTab" class="login-panels">
       <q-tab-panel name="signIn">
-        <h1>Sign In</h1>
+        <h1>{{ $t('content.login.headingSignIn') }}</h1>
         <div class="q-pa-md block-center" style="max-width: 400px">
           <q-form @submit.prevent="onSignInSubmit" @reset="onSignInReset" class="q-gutter-md">
             <q-input
               filled
               type="email"
               v-model="signInEmail"
-              label="Email *"
+              :label="$t('content.login.email')"
               lazy-rules
               :error="!!emailErrorSignIn"
               :error-message="emailErrorSignIn"
@@ -23,7 +23,7 @@
               filled
               :type="showSignInPassword ? 'text' : 'password'"
               v-model="signInPassword"
-              label="Password *"
+              :label="$t('content.login.password')"
               lazy-rules
               :error="!!passwordErrorSignIn"
               :error-message="passwordErrorSignIn"
@@ -38,8 +38,14 @@
             </q-input>
             <div v-if="loginError" class="text-negative">Invalid email or password</div>
             <div>
-              <q-btn label="Sign In" type="submit" color="primary" />
-              <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+              <q-btn :label="$t('content.login.btnSignIn')" type="submit" color="primary" />
+              <q-btn
+                :label="$t('content.login.btnReset')"
+                type="reset"
+                color="primary"
+                flat
+                class="q-ml-sm"
+              />
             </div>
           </q-form>
 
@@ -50,14 +56,14 @@
       </q-tab-panel>
 
       <q-tab-panel name="signUp">
-        <h1>Sign Up</h1>
+        <h1>{{ $t('content.login.headingSignUp') }}</h1>
         <div class="q-pa-md block-center" style="max-width: 400px">
           <q-form @submit.prevent="onSignUpSubmit" @reset="onSignUpReset" class="q-gutter-md">
             <q-input
               filled
               type="text"
               v-model="signUpName"
-              label="Name *"
+              :label="$t('content.login.name')"
               lazy-rules
               :error="!!nameErrorSignUp"
               :error-message="nameErrorSignUp"
@@ -66,7 +72,7 @@
               filled
               type="email"
               v-model="signUpEmail"
-              label="Email *"
+              :label="$t('content.login.email')"
               lazy-rules
               :error="!!emailErrorSignUp"
               :error-message="emailErrorSignUp"
@@ -75,7 +81,7 @@
               filled
               :type="showSignUpPassword ? 'text' : 'password'"
               v-model="signUpPassword"
-              label="Password *"
+              :label="$t('content.login.password')"
               lazy-rules
               :error="!!passwordErrorSignUp"
               :error-message="passwordErrorSignUp"
@@ -92,7 +98,7 @@
               filled
               :type="showSignUpRepeatPassword ? 'text' : 'password'"
               v-model="signUpRepeatPassword"
-              label="Repeat password *"
+              :label="$t('content.login.repeatPassword')"
               lazy-rules
               :error="!!repeatPasswordErrorSignUp"
               :error-message="repeatPasswordErrorSignUp"
@@ -111,8 +117,14 @@
             </div> -->
             <div v-if="userExists" class="text-negative">User already exists</div>
             <div>
-              <q-btn label="Sign Up" type="submit" color="primary" />
-              <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+              <q-btn :label="$t('content.login.btnSignUp')" type="submit" color="primary" />
+              <q-btn
+                :label="$t('content.login.btnReset')"
+                type="reset"
+                color="primary"
+                flat
+                class="q-ml-sm"
+              />
             </div>
           </q-form>
           <div v-if="errorMessagesSignUp.length" class="error-box q-mt-md bigger-alert">

@@ -7,6 +7,8 @@
         <q-toolbar-title> Shop App </q-toolbar-title>
 
         <div>{{ currentDate }}</div>
+
+        <LanguageSwitcher />
       </q-toolbar>
     </q-header>
 
@@ -24,6 +26,7 @@ import { ref } from 'vue'
 import Sidebar from './SidebarLayout.vue'
 import { getCurrentDate } from '../utils/date'
 import BackToTopButton from '../components/BackToTopButton.vue' // Імпорт компонента
+import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 
 const leftDrawerOpen = ref(false) // Сайдбар закритий за замовчуванням
 

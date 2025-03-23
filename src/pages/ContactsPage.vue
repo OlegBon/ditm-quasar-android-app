@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <h1>Our Contacts</h1>
+    <h1>{{ $t('content.contacts.heading') }}</h1>
     <img
       class="home-img"
       alt="Quasar logo"
@@ -10,14 +10,21 @@
     <div class="q-pa-md padding-0 any-link">
       <q-list bordered separator>
         <q-item clickable v-ripple>
-          <q-item-section>Phone: <a href="tel:+380971234567">+380 97 123 4567</a></q-item-section>
-        </q-item>
-        <q-item clickable v-ripple>
-          <q-item-section>Email: <a href="mailto:info@app.com">info@app.com</a></q-item-section>
+          <q-item-section
+            >{{ $t('content.contacts.phone') }}
+            <a href="tel:+380971234567">+380 97 123 4567</a></q-item-section
+          >
         </q-item>
         <q-item clickable v-ripple>
           <q-item-section
-            >WhatsApp: <a href="https://wa.me/380971234567">+380 97 123 4567</a></q-item-section
+            >{{ $t('content.contacts.email') }}
+            <a href="mailto:info@app.com">info@app.com</a></q-item-section
+          >
+        </q-item>
+        <q-item clickable v-ripple>
+          <q-item-section
+            >{{ $t('content.contacts.whatsApp') }}
+            <a href="https://wa.me/380971234567">+380 97 123 4567</a></q-item-section
           >
         </q-item>
       </q-list>

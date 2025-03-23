@@ -136,3 +136,41 @@ h1 {
   color: #1976d2;
   text-decoration: none;
 }
+
+.language-menu {
+  position: relative;
+  margin-left: 20px;
+  touch-action: manipulation;
+  z-index: 10;
+}
+
+.language-menu button {
+  cursor: pointer;
+  background: none;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: #fff;
+  background: var(--q-secondary);
+}
+
+.lang-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--q-secondary);
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lang-dropdown-menu li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.lang-dropdown-menu li:hover {
+  background: var(--q-primary);
+}

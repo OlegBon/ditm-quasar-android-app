@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout title="Cart" />
+  <DefaultLayout :title="$t('layouts.cart')" />
 </template>
 
 <script setup>

@@ -6,7 +6,7 @@
     @update:model-value="updateDrawerOpen"
   >
     <q-list>
-      <q-item-label header> Welcome to App </q-item-label>
+      <q-item-label header> {{ $t('content.layoutSidebar.welcome') }} </q-item-label>
 
       <!-- Лінки для залогінених користувачів -->
       <q-item

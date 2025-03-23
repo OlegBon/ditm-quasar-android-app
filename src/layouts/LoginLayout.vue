@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout title="Login">
+  <DefaultLayout :title="$t('layouts.login')">
     <router-view />
   </DefaultLayout>
 </template>

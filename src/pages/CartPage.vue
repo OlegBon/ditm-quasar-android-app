@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <h1>Cart</h1>
+    <h1>{{ $t('content.cart.heading') }}</h1>
     <q-list>
       <q-item v-for="item in cartItems" :key="item.id" bordered>
         <q-item-section clickable @click="goToProduct(item.id)">
@@ -16,7 +16,7 @@
           <q-input
             v-model.number="item.quantity"
             type="number"
-            label="Quantity"
+            :label="$t('content.cart.quantity')"
             @input="updateQuantity(item.id, item.quantity)"
           />
         </q-item-section>
@@ -27,8 +27,8 @@
         </q-item-section>
       </q-item>
     </q-list>
-    <p class="total-price">Total Price: {{ totalPrice }}</p>
-    <q-btn color="primary" @click="clearCart">Clear Cart</q-btn>
+    <p class="total-price">{{ $t('content.cart.totalPrice') }} {{ totalPrice }}</p>
+    <q-btn color="primary" @click="clearCart">{{ $t('content.cart.clearCart') }}</q-btn>
   </q-page>
 </template>
 

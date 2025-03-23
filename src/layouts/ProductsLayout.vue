@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout title="Products" />
+  <DefaultLayout :title="$t('layouts.products')" />
 </template>
 
 <script setup>

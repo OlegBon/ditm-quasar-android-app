@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <h1>Hello!</h1>
+    <h1>{{ $t('content.index.heading') }}</h1>
     <img
       class="home-img"
       alt="Quasar logo"
@@ -8,15 +8,7 @@
       style="width: 100%; height: 100%"
     />
     <p class="p-16">
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit odit non aut, praesentium
-      explicabo eligendi quaerat assumenda dolor tempora quae omnis quasi molestias? Nobis enim
-      omnis laudantium. Distinctio, in ea, officia laborum possimus facere dolor fugiat quas nostrum
-      nobis rem? Provident laboriosam porro veniam aspernatur fugit. Blanditiis, illo aperiam ad
-      earum commodi voluptatum cum consequuntur mollitia tempore dolor. Incidunt vel doloribus ad
-      nesciunt sed ipsum quas, sapiente, maxime assumenda illum inventore asperiores quisquam
-      perferendis quis dolorem quaerat impedit velit facere deserunt expedita. Omnis aspernatur
-      quas, maiores est nesciunt illo, minus cupiditate ab ipsum sapiente saepe. Ad voluptatibus
-      rerum iste porro.
+      {{ $t('content.index.text') }}
     </p>
   </q-page>
 </template>

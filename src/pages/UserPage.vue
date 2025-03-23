@@ -1,12 +1,12 @@
 <template>
   <q-page padding class="flex column items-center">
-    <h1>User Page</h1>
+    <h1>{{ $t('content.user.heading') }}</h1>
     <div style="max-width: 400px; margin-top: 40px" class="q-mx-auto">
-      <p class="big-text text-center">Hello, {{ userName }}</p>
-      <p class="big-text text-center">Your email: {{ userEmail }}</p>
+      <p class="big-text text-center">{{ $t('content.user.hello') }} {{ userName }}</p>
+      <p class="big-text text-center">{{ $t('content.user.yourEmail') }} {{ userEmail }}</p>
     </div>
 
-    <q-btn label="Logout" color="primary" class="q-mt-md" @click="logout" />
+    <q-btn :label="$t('content.user.btnLogout')" color="primary" class="q-mt-md" @click="logout" />
   </q-page>
 </template>
 

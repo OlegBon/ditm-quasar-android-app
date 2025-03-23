@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout title="Contacts" />
+  <DefaultLayout :title="$t('layouts.contacts')" />
 </template>
 
 <script setup>

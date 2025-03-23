@@ -1,7 +1,114 @@
-// This is just an example,
-// so you can safely delete all default props below
-
 export default {
   failed: 'Action failed',
-  success: 'Action was successful'
+  success: 'Action was successful',
+
+  layouts: {
+    about: 'About Us',
+    cart: 'Cart',
+    contacts: 'Contacts',
+    login: 'Login',
+    main: 'Main',
+    products: 'Products',
+    user: 'User',
+    sidebar: 'Sidebar',
+  },
+
+  pages: {
+    about: 'About Us',
+    cart: 'Cart',
+    contacts: 'Contacts',
+    error: 'Error: Page not found',
+    index: 'Home Page',
+    login: 'Login',
+    productDetail: 'Product Detail',
+    products: 'Products',
+    user: 'User',
+  },
+
+  content: {
+    layoutDefault: {
+      tabProducts: 'Products',
+      tabCart: 'Cart',
+      tabLogin: 'Login',
+      copyright: 'All right reserved',
+      linkHome: 'Home',
+    },
+    layoutProductDefault: {
+      tabProducts: 'Products',
+      tabCart: 'Cart',
+      tabLogin: 'Login',
+      copyright: 'All right reserved',
+      linkHome: 'Home',
+    },
+    layoutSidebar: {
+      welcome: 'Welcome to App',
+      linkLogin: 'Login',
+      linlUser: 'User',
+      linkAbout: 'About Us',
+      linkProducts: 'Products',
+      linkCart: 'Cart',
+      linkContacts: 'Contacts',
+    },
+    about: {
+      heading: 'About Us',
+      text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit odit non aut, praesentium explicabo eligendi quaerat assumenda dolor tempora quae omnis quasi molestias? Nobis enim omnis laudantium. Distinctio, in ea, officia laborum possimus facere dolor fugiat quas nostrum nobis rem? Provident laboriosam porro veniam aspernatur fugit. Blanditiis, illo aperiam ad earum commodi voluptatum cum consequuntur mollitia tempore dolor. Incidunt vel doloribus ad nesciunt sed ipsum quas, sapiente, maxime assumenda illum inventore asperiores quisquam perferendis quis dolorem quaerat impedit velit facere deserunt expedita. Omnis aspernatur quas, maiores est nesciunt illo, minus cupiditate ab ipsum sapiente saepe. Ad voluptatibus rerum iste porro.',
+    },
+    cart: {
+      heading: 'Cart',
+      quantity: 'Quantity',
+      totalPrice: 'Total Price: ',
+      clearCart: 'Clear Cart',
+    },
+    contacts: {
+      heading: 'Our Contacts',
+      phone: 'Phone',
+      email: 'Email',
+      whatsApp: 'WhatsApp',
+    },
+    error: {
+      heading: 'Oops. Nothing here...',
+    },
+    index: {
+      heading: 'Hello!',
+      text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit odit non aut, praesentium explicabo eligendi quaerat assumenda dolor tempora quae omnis quasi molestias? Nobis enim omnis laudantium. Distinctio, in ea, officia laborum possimus facere dolor fugiat quas nostrum nobis rem? Provident laboriosam porro veniam aspernatur fugit. Blanditiis, illo aperiam ad earum commodi voluptatum cum consequuntur mollitia tempore dolor. Incidunt vel doloribus ad nesciunt sed ipsum quas, sapiente, maxime assumenda illum inventore asperiores quisquam perferendis quis dolorem quaerat impedit velit facere deserunt expedita. Omnis aspernatur quas, maiores est nesciunt illo, minus cupiditate ab ipsum sapiente saepe. Ad voluptatibus rerum iste porro.',
+    },
+    login: {
+      tabSignIn: 'Sign In',
+      tabSignUp: 'Sign Up',
+      headingSignIn: 'Sign In',
+      headingSignUpt: 'Sign Up',
+      name: 'Name *',
+      email: 'Email *',
+      password: 'Password *',
+      repeatPassword: 'Repeat Password *',
+      btnSignIn: 'Sign In',
+      btnSignUp: 'Sign Up',
+      btnReset: 'Reset',
+    },
+    productDetail: {
+      heading: 'test',
+      brand: 'Brand: ',
+      sku: 'SKU: ',
+      rating: 'Rating: ',
+      status: 'Status: ',
+      return: 'Return: ',
+      warranty: 'Warranty: ',
+      price: 'Price: ',
+      btnAddToCart: 'Add to Cart',
+      loadingTxt: 'Loading product information...',
+    },
+    products: {
+      heading: 'test',
+      placeholderSearch: 'Search',
+      labelAllProducts: 'All Products',
+      labelSelectCategory: 'Select Category',
+      quantityOfProducts: 'Quantity of Products: ',
+    },
+    user: {
+      heading: 'User Page',
+      hello: 'Hello, ',
+      yourEmail: 'Your email: ',
+      btnLogout: 'Logout',
+    },
+  },
 }

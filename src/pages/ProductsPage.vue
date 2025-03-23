@@ -1,6 +1,12 @@
 <template>
   <q-page padding>
-    <q-input v-model="search" debounce="500" filled placeholder="Search" class="search-products">
+    <q-input
+      v-model="search"
+      debounce="500"
+      filled
+      :placeholder="$t('content.products.placeholderSearch')"
+      class="search-products"
+    >
       <template v-slot:append>
         <q-icon v-if="!search" name="search" />
         <q-icon v-if="search" name="close" @click="clearSearch" />
@@ -12,7 +18,7 @@
       filled
       v-model="selectedCategory"
       :options="categoryOptions"
-      label="Select Category"
+      :label="$t('content.products.labelSelectCategory')"
       class="filter-products"
       behavior="menu"
       option-label="label"
@@ -20,7 +26,7 @@
     />
 
     <p class="quantity-products">
-      Quantity of Products: <span>{{ productCount }}</span>
+      {{ $t('content.products.quantityOfProducts') }}<span>{{ productCount }}</span>
     </p>
 
     <div>

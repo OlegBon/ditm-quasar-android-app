@@ -1,5 +1,5 @@
 <template>
-  <DefaultLayout title="User" />
+  <DefaultLayout :title="$t('layouts.user')" />
 </template>
 
 <script setup>
