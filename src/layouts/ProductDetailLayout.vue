@@ -69,6 +69,7 @@ import { getCurrentDate } from '../utils/date'
 import BackToTopButton from '../components/BackToTopButton.vue'
 import { tryFetchUser, user } from '../utils/userService'
 import LanguageSwitcher from '../components/LanguageSwitcher.vue'
+import { useI18n } from 'vue-i18n'
 
 onMounted(() => {
   tryFetchUser()
@@ -93,5 +94,7 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
-const currentDate = ref(getCurrentDate())
+// const currentDate = ref(getCurrentDate())
+const { locale } = useI18n()
+const currentDate = computed(() => getCurrentDate(locale.value))
 </script>
