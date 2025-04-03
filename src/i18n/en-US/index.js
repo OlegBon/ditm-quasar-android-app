@@ -43,9 +43,10 @@ export default {
     layoutSidebar: {
       welcome: 'Welcome to App',
       linkLogin: 'Login',
-      linlUser: 'User',
+      linkUser: 'User',
       linkAbout: 'About Us',
       linkProducts: 'Products',
+      linkAllProducts: 'All Products',
       linkCart: 'Cart',
       linkContacts: 'Contacts',
     },

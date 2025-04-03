@@ -41,8 +41,15 @@ export default {
     },
     switchLanguage(langCode) {
       this.$i18n.locale = langCode
+      localStorage.setItem('locale', langCode) // Збереження мови в localStorage
       this.isDropdownOpen = false
     },
+  },
+  created() {
+    const savedLocale = localStorage.getItem('locale')
+    if (savedLocale) {
+      this.$i18n.locale = savedLocale // Встановлення локалі при завантаженні сторінки
+    }
   },
 }
 </script>

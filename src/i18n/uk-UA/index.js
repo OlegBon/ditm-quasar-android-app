@@ -43,9 +43,10 @@ export default {
     layoutSidebar: {
       welcome: 'Ласкаво просимо до нашого застосунку',
       linkLogin: 'Вхід',
-      linlUser: 'Користувач',
+      linkUser: 'Користувач',
       linkAbout: 'Про нас',
       linkProducts: 'Товари',
+      linkAllProducts: 'Усі товари',
       linkCart: 'Кошик',
       linkContacts: 'Контакти',
     },

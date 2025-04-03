@@ -55,9 +55,13 @@
         <q-item-section>
           <q-item-label>
             {{ link.title }}
-            <q-badge v-if="link.title === 'Cart'" color="red" class="badge-custom">{{
-              uniqueCartItemsCount
-            }}</q-badge>
+            <!-- <q-badge v-if="link.title === 'Cart'" color="red" class="badge-custom">{{ -->
+            <q-badge
+              v-if="link.title === t('content.layoutSidebar.linkCart')"
+              color="red"
+              class="badge-custom"
+              >{{ uniqueCartItemsCount }}</q-badge
+            >
           </q-item-label>
           <q-item-label :caption="true">{{ link.caption }}</q-item-label>
         </q-item-section>
@@ -90,6 +94,9 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import { useCartStore } from '../store/cartStore'
 import { tryFetchUser, user } from '../utils/userService'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 onMounted(() => {
   tryFetchUser()
@@ -119,15 +126,16 @@ function updateDrawerOpen(value) {
   emit('update:open', value)
 }
 
-const loginLink = {
-  title: 'Login',
-  caption: 'Sign In',
+const loginLink = computed(() => ({
+  // title: 'Login',
+  title: t('content.layoutSidebar.linkLogin'),
+  caption: t('content.layoutSidebar.linkLogin'),
   icon: 'ion-log-in',
   link: '/login',
-}
+}))
 
 const userLink = computed(() => ({
-  title: user.value?.name || 'User',
+  title: user.value?.name || t('content.layoutSidebar.linkUser'),
   caption: user.value?.email || '',
   icon: 'ion-person',
   link: '/user',
@@ -135,28 +143,30 @@ const userLink = computed(() => ({
 
 const isLoggedIn = computed(() => !!user.value)
 
-const linksList = ref([
+const linksList = computed(() => [
   {
-    title: 'About',
-    caption: 'About Us',
+    title: t('content.layoutSidebar.linkAbout'),
+    caption: t('content.layoutSidebar.linkAbout'),
     icon: 'ion-md-hand',
     link: '/about',
   },
   {
-    title: 'Products',
-    caption: 'All Products',
+    title: t('content.layoutSidebar.linkProducts'),
+    caption: t('content.layoutSidebar.linkAllProducts'),
     icon: 'ion-basket',
     link: '/products',
   },
   {
-    title: 'Cart',
-    caption: 'Basket',
+    // title: 'Cart',
+    // caption: 'Cart',
+    title: t('content.layoutSidebar.linkCart'),
+    caption: t('content.layoutSidebar.linkCart'),
     icon: 'ion-cart',
     link: '/cart',
   },
   {
-    title: 'Contacts',
-    caption: 'Contacts',
+    title: t('content.layoutSidebar.linkContacts'),
+    caption: t('content.layoutSidebar.linkContacts'),
     icon: 'map',
     link: '/contacts',
   },
@@ -174,7 +184,8 @@ const additionalLinksList = [
 const visibleLinksList = computed(() => {
   return isLoggedIn.value
     ? linksList.value
-    : linksList.value.filter((link) => link.title !== 'Cart')
+    : // : linksList.value.filter((link) => link.title !== 'Cart')
+      linksList.value.filter((link) => link.title !== t('content.layoutSidebar.linkCart'))
 })
 
 const uniqueCartItemsCount = computed(() => cartStore.items.length)
