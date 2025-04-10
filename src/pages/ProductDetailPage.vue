@@ -4,6 +4,13 @@
       <q-card v-if="product.title">
         <q-card-section>
           <div class="text-h6">{{ product.title }}</div>
+          <!-- Add favorite icon -->
+          <q-icon
+            name="ion-heart"
+            class="absolute-top-right"
+            size="lg"
+            style="margin: 14px; color: #ffcccc"
+          />
         </q-card-section>
 
         <q-card-section>

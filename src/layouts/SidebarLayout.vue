@@ -165,6 +165,12 @@ const linksList = computed(() => [
     link: '/cart',
   },
   {
+    title: 'Wishlist',
+    caption: 'Yor Wishlist',
+    icon: 'ion-heart',
+    link: '/wishlist',
+  },
+  {
     title: t('content.layoutSidebar.linkContacts'),
     caption: t('content.layoutSidebar.linkContacts'),
     icon: 'map',
@@ -185,7 +191,9 @@ const visibleLinksList = computed(() => {
   return isLoggedIn.value
     ? linksList.value
     : // : linksList.value.filter((link) => link.title !== 'Cart')
-      linksList.value.filter((link) => link.title !== t('content.layoutSidebar.linkCart'))
+      linksList.value.filter(
+        (link) => link.title !== t('content.layoutSidebar.linkCart') && link.title !== 'Wishlist',
+      )
 })
 
 const uniqueCartItemsCount = computed(() => cartStore.items.length)

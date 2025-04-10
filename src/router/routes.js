@@ -37,6 +37,11 @@ const routes = [
     component: () => import('layouts/UserLayout.vue'),
     children: [{ path: '', component: () => import('pages/UserPage.vue') }],
   },
+  {
+    path: '/wishlist',
+    component: () => import('layouts/WishListLayout.vue'),
+    children: [{ path: '', component: () => import('pages/WishListPage.vue') }],
+  },
 
   // Always leave this as last one,
   // but you can also remove it
