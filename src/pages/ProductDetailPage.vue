@@ -7,11 +7,15 @@
           <!-- Add favorite icon -->
           <q-icon
             v-if="isLoggedIn"
-            name="ion-heart"
+            :name="isInWishlist(product.id) ? 'favorite' : 'favorite_border'"
             class="absolute-top-right"
             size="lg"
-            style="margin: 14px; color: #ffcccc"
-            @click="addWishList(product.id)"
+            :style="{
+              margin: '14px',
+              color: isInWishlist(product.id) ? 'red' : 'grey',
+              cursor: 'pointer',
+            }"
+            @click="handleWishlistClick(product.id)"
           />
         </q-card-section>
 
@@ -61,10 +65,6 @@ import { useCartStore } from 'src/store/cartStore'
 import { tryFetchUser, user } from '../utils/userService'
 import axios from 'axios'
 
-onMounted(() => {
-  tryFetchUser()
-})
-
 const route = useRoute()
 const cartStore = useCartStore()
 
@@ -74,8 +74,24 @@ const isLoggedIn = computed(() => !!user.value)
 const wishlist = ref([])
 
 onMounted(async () => {
+  // Спочатку отримуємо користувача
+  await tryFetchUser()
+
+  // Перевірка, чи користувач все ще доступний
+  if (!user.value || !user.value.id) {
+    console.warn('User data is not available after page refresh')
+    return
+  }
+
+  // Завантаження продукту
   const { data } = await api(`https://dummyjson.com/products/${route.params.id}`)
   product.value = data
+
+  // Завантаження списку бажань
+  const response = await axios.get('http://127.0.0.1:8000/api/wishlist', {
+    params: { user_id: user.value.id },
+  })
+  wishlist.value = response.data.map((product) => product.id)
 })
 
 function addToCart(product) {
@@ -86,22 +102,51 @@ function isInWishlist(productId) {
   return wishlist.value.includes(productId)
 }
 
-async function addWishList(productId) {
+const isLoading = ref(false)
+
+async function handleWishlistClick(productId) {
+  if (isLoading.value) return // Запобігаємо дублювання кліків
+  isLoading.value = true // Початок завантаження
+
+  try {
+    if (isInWishlist(productId)) {
+      await removeFromWishlist(productId)
+    } else {
+      await addToWishlist(productId)
+    }
+  } catch (error) {
+    console.error('Error updating wishlist:', error)
+  } finally {
+    isLoading.value = false // Завершення завантаження
+  }
+}
+
+async function addToWishlist(productId) {
   if (!user.value.id) return
 
-  const url = isInWishlist(productId)
-    ? 'http://127.0.0.1:8000/api/wishlist/delete'
-    : 'http://127.0.0.1:8000/api/wishlist/add'
+  try {
+    await axios.post('http://127.0.0.1:8000/api/wishlist/add', {
+      user_id: user.value.id,
+      product_id: productId,
+    })
+    wishlist.value.push(productId) // Оновлюємо локальний список бажань
+  } catch (error) {
+    console.error('Error adding to wishlist:', error)
+  }
+}
 
-  await axios.post(url, {
-    user_id: user.value.id,
-    product_id: productId,
-  })
+async function removeFromWishlist(productId) {
+  if (!user.value.id) return
 
-  if (isInWishlist(productId)) {
-    wishlist.value = wishlist.value.filter((id) => id !== productId)
-  } else {
-    wishlist.value.push(productId)
+  try {
+    await axios.post('http://127.0.0.1:8000/api/wishlist/delete', {
+      user_id: user.value.id,
+      product_id: productId,
+    })
+    wishlist.value = wishlist.value.filter((id) => id !== productId) // Оновлюємо список
+    // console.log('Removed from wishlist:', productId) // Лог для перевірки
+  } catch (error) {
+    console.error('Error removing from wishlist:', error)
   }
 }
 </script>
