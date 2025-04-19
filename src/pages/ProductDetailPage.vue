@@ -52,6 +52,7 @@
       <q-card v-else>
         <q-card-section> {{ $t('content.productDetail.loadingTxt') }} </q-card-section>
       </q-card>
+      <RecentlyViewedProducts />
     </q-page>
   </ProductDetailLayout>
 </template>
@@ -64,6 +65,7 @@ import ProductDetailLayout from 'layouts/ProductDetailLayout.vue'
 import { useCartStore } from 'src/store/cartStore'
 import { tryFetchUser, user } from '../utils/userService'
 import axios from 'axios'
+import RecentlyViewedProducts from '../components/RecentlyViewedProducts.vue'
 
 const route = useRoute()
 const cartStore = useCartStore()

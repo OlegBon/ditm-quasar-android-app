@@ -10,9 +10,12 @@
     <p class="p-16">
       {{ $t('content.index.text') }}
     </p>
+    <RecentlyViewedProducts />
   </q-page>
 </template>
 
 <script setup>
+import RecentlyViewedProducts from '../components/RecentlyViewedProducts.vue'
+
 //
 </script>

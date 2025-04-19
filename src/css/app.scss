@@ -64,7 +64,7 @@ h1 {
 
 .back-to-top {
   position: fixed;
-  right: 45%;
+  right: 70%;
   bottom: 80px; /* Поруч з футером */
 }
 
@@ -173,4 +173,19 @@ h1 {
 
 .lang-dropdown-menu li:hover {
   background: var(--q-primary);
+}
+
+.q-card-recent {
+  width: 200px !important;
+  margin: 0 auto !important;
+}
+
+.q-card-recent img {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.q-card-recent-text-title {
+  font-size: 16px;
+  font-weight: 500;
 }

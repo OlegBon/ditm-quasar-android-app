@@ -53,6 +53,7 @@ import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import { useCartStore } from '../store/cartStore'
 import { tryFetchUser, user } from '../utils/userService'
+import axios from 'axios'
 
 onMounted(() => {
   tryFetchUser()
@@ -149,7 +150,24 @@ function addToCart(product) {
   }
 }
 
-function goToProduct(productId) {
-  router.push(`/products/${productId}`)
+// function goToProduct(productId) {
+//   router.push(`/products/${productId}`)
+// }
+
+async function goToProduct(productId) {
+  try {
+    // Додаємо запис про перегляд у базу
+    await axios.post('http://127.0.0.1:8000/api/user-viewed-products', {
+      user_id: user.value.id, // ID користувача
+      product_id: productId, // ID товару
+    })
+
+    // console.log(`Product ID ${productId} was added to recently viewed`)
+
+    // Переходимо до сторінки товару
+    router.push(`/products/${productId}`)
+  } catch (error) {
+    console.error('Error adding viewed product:', error)
+  }
 }
 </script>
