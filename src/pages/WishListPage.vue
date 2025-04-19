@@ -56,6 +56,7 @@ onMounted(async () => {
       params: { user_id: user.value.id },
     })
     wishlist.value = response.data
+    // console.log('Wishlist data:', wishlist.value) // Лог для перевірки
   } catch (error) {
     console.error('Error loading wishlist:', error)
   } finally {

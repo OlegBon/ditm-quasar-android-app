@@ -53,6 +53,33 @@
       <q-card v-else>
         <q-card-section> {{ $t('content.productDetail.loadingTxt') }} </q-card-section>
       </q-card>
+      <!-- Add Similar products -->
+      <div class="similar-products">
+        <h2 class="text-h5 text-center q-mt-xl">Similar Products</h2>
+        <h5 v-if="isDataLoaded && similarProducts.length === 0" class="text-center">
+          No similar products viewed products yet.
+        </h5>
+        <q-card v-if="isDataLoaded && similarProducts.length > 0" class="q-card-similar">
+          <q-carousel v-model="activeSlide" animated swipeable>
+            <q-carousel-slide
+              v-for="(product, index) in similarProducts"
+              :key="product.id"
+              :name="index"
+            >
+              <div @click="goToProduct(product.id)" class="text-center" style="cursor: pointer">
+                <img :src="product.thumbnail" :alt="product.title" />
+                <p class="q-card-similar-text-title">{{ product.title }}</p>
+                <p>
+                  {{ product.description.slice(0, 80)
+                  }}{{ product.description.length > 140 ? '...' : '' }}
+                </p>
+                <p>{{ product.price }} $</p>
+              </div>
+            </q-carousel-slide>
+          </q-carousel>
+        </q-card>
+      </div>
+      <!-- Add recently viewed products -->
       <RecentlyViewedProducts />
     </q-page>
   </ProductDetailLayout>
@@ -75,26 +102,42 @@ const product = ref({})
 const isLoggedIn = computed(() => !!user.value)
 
 const wishlist = ref([])
+const similarProducts = ref([])
+
+const isDataLoaded = ref(false) // Стан завантаження
+const activeSlide = ref(0) // Поточний слайд у каруселі
 
 onMounted(async () => {
-  // Спочатку отримуємо користувача
-  await tryFetchUser()
+  try {
+    await tryFetchUser() // Завантаження користувача
 
-  // Перевірка, чи користувач все ще доступний
-  if (!user.value || !user.value.id) {
-    console.warn('User data is not available after page refresh')
-    return
+    if (!user.value || !user.value.id) {
+      console.warn('User data is not available after page refresh')
+      return
+    }
+
+    // Завантаження продукту
+    const { data } = await api(`https://dummyjson.com/products/${route.params.id}`)
+    product.value = data
+
+    // Завантаження списку бажань
+    const response = await axios.get('http://127.0.0.1:8000/api/wishlist', {
+      params: { user_id: user.value.id },
+    })
+    wishlist.value = response.data.map((product) => product.id)
+    // console.log('Wishlist:', wishlist.value) // Лог для перевірки
+
+    // Завантаження схожих товарів
+    const responseSimilar = await axios.get('http://127.0.0.1:8000/api/products', {
+      params: { category: product.value.category },
+    })
+    similarProducts.value = responseSimilar.data
+    // console.log('Similar products:', similarProducts.value) // Лог для перевірки
+  } catch (error) {
+    console.error('Error loading recently viewed products:', error)
+  } finally {
+    isDataLoaded.value = true // Дані завантажені
   }
-
-  // Завантаження продукту
-  const { data } = await api(`https://dummyjson.com/products/${route.params.id}`)
-  product.value = data
-
-  // Завантаження списку бажань
-  const response = await axios.get('http://127.0.0.1:8000/api/wishlist', {
-    params: { user_id: user.value.id },
-  })
-  wishlist.value = response.data.map((product) => product.id)
 })
 
 function addToCart(product) {

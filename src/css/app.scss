@@ -175,17 +175,20 @@ h1 {
   background: var(--q-primary);
 }
 
-.q-card-recent {
+.q-card-recent,
+.q-card-similar {
   width: 200px !important;
   margin: 0 auto !important;
 }
 
-.q-card-recent img {
+.q-card-recent img,
+.q-card-similar img {
   width: 100% !important;
   height: 100% !important;
 }
 
-.q-card-recent-text-title {
+.q-card-recent-text-title,
+.q-card-similar-text-title {
   font-size: 16px;
   font-weight: 500;
 }
