@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding class="q-mb-xl">
     <q-input
       v-model="search"
       debounce="500"

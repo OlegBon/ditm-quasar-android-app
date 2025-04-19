@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding class="q-mb-xl">
     <h1>{{ $t('content.cart.heading') }}</h1>
     <q-list>
       <q-item v-for="item in cartItems" :key="item.id" bordered>

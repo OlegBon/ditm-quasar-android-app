@@ -1,5 +1,5 @@
 <template>
-  <q-page padding class="flex column items-center">
+  <q-page padding class="flex column items-center q-mb-xl">
     <h1>{{ $t('content.user.heading') }}</h1>
     <div style="max-width: 400px; margin-top: 40px" class="q-mx-auto">
       <p class="big-text text-center">{{ $t('content.user.hello') }} {{ userName }}</p>

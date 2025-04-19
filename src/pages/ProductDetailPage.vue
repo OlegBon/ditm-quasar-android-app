@@ -1,6 +1,6 @@
 <template>
   <ProductDetailLayout :title="product.title || 'Loading...'">
-    <q-page padding>
+    <q-page padding class="q-mb-xl">
       <q-card v-if="product.title">
         <q-card-section>
           <div class="text-h6">{{ product.title }}</div>

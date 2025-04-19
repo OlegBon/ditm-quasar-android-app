@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding class="q-mb-xl">
     <h1>{{ $t('content.contacts.heading') }}</h1>
     <img
       class="home-img"

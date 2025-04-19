@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding class="q-mb-xl">
     <h1>Welcome to your Wishlist!</h1>
     <div>
       <h5 v-if="wishlist.length === 0" class="text-center">Your wishlist is empty.</h5>

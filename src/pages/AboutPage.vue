@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding class="q-mb-xl">
     <h1>{{ $t('content.about.heading') }}</h1>
     <p class="p-16">
       {{ $t('content.about.text') }}

@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding class="q-mb-xl">
     <q-tabs v-model="activeTab" class="login-tabs">
       <q-tab name="signIn" :label="$t('content.login.tabSignIn')" />
       <q-tab name="signUp" :label="$t('content.login.tabSignUp')" />
