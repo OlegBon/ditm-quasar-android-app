@@ -24,6 +24,7 @@
         </q-card-section>
 
         <q-card-section>
+          <p class="text-secondary">{{ capitalize(product.category) }}</p>
           <div>{{ product.description }}</div>
           <div class="text-top">{{ $t('content.productDetail.brand') }} {{ product.brand }}</div>
           <div class="text-top">{{ $t('content.productDetail.sku') }} {{ product.sku }}</div>
@@ -58,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, capitalize } from 'vue'
 import { api } from 'boot/axios'
 import { useRoute } from 'vue-router'
 import ProductDetailLayout from 'layouts/ProductDetailLayout.vue'
