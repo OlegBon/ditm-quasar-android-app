@@ -95,7 +95,8 @@ import { tryFetchUser, user } from '../utils/userService'
 import axios from 'axios'
 import RecentlyViewedProducts from '../components/RecentlyViewedProducts.vue'
 
-const route = useRoute()
+const router = useRoute()
+
 const cartStore = useCartStore()
 
 const product = ref({})
@@ -117,14 +118,15 @@ onMounted(async () => {
     }
 
     // Завантаження продукту
-    const { data } = await api(`https://dummyjson.com/products/${route.params.id}`)
+    const { data } = await api(`https://dummyjson.com/products/${router.params.id}`)
     product.value = data
+    // console.log('Product ID:', product.value.id) // Лог для перевірки
 
     // Завантаження списку бажань
-    const response = await axios.get('http://127.0.0.1:8000/api/wishlist', {
+    const responseWishlist = await axios.get('http://127.0.0.1:8000/api/wishlist', {
       params: { user_id: user.value.id },
     })
-    wishlist.value = response.data.map((product) => product.id)
+    wishlist.value = responseWishlist.data.map((product) => product.id)
     // console.log('Wishlist:', wishlist.value) // Лог для перевірки
 
     // Завантаження схожих товарів
@@ -134,7 +136,7 @@ onMounted(async () => {
     similarProducts.value = responseSimilar.data
     // console.log('Similar products:', similarProducts.value) // Лог для перевірки
   } catch (error) {
-    console.error('Error loading recently viewed products:', error)
+    console.error('Error loading similar viewed products:', error)
   } finally {
     isDataLoaded.value = true // Дані завантажені
   }
@@ -193,6 +195,19 @@ async function removeFromWishlist(productId) {
     // console.log('Removed from wishlist:', productId) // Лог для перевірки
   } catch (error) {
     console.error('Error removing from wishlist:', error)
+  }
+}
+
+async function goToProduct(productId) {
+  try {
+    await axios.post('http://127.0.0.1:8000/api/user-viewed-products', {
+      user_id: user.value.id,
+      product_id: productId,
+    })
+
+    router.push(`/products/${productId}`)
+  } catch (error) {
+    console.error('Error adding viewed product:', error)
   }
 }
 </script>
