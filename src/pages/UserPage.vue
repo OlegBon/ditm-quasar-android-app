@@ -1,12 +1,26 @@
 <template>
   <q-page padding class="flex column items-center q-mb-xl">
     <h1>{{ $t('content.user.heading') }}</h1>
-    <div style="max-width: 400px; margin-top: 40px" class="q-mx-auto">
-      <p class="big-text text-center">{{ $t('content.user.hello') }} {{ userName }}</p>
-      <p class="big-text text-center">{{ $t('content.user.yourEmail') }} {{ userEmail }}</p>
-    </div>
+    <q-spinner
+      v-if="!isLoading"
+      color="primary"
+      size="50px"
+      style="display: block; margin: 0 auto"
+    />
+    <div v-else>
+      <div style="max-width: 400px; margin-top: 40px" class="q-mx-auto">
+        <p class="big-text text-center">{{ $t('content.user.hello') }} {{ userName }}</p>
+        <p class="big-text text-center">{{ $t('content.user.yourEmail') }} {{ userEmail }}</p>
+      </div>
 
-    <q-btn :label="$t('content.user.btnLogout')" color="primary" class="q-mt-md" @click="logout" />
+      <q-btn
+        :label="$t('content.user.btnLogout')"
+        color="primary"
+        class="q-mt-md"
+        @click="logout"
+        style="margin: 20px auto; display: block"
+      />
+    </div>
   </q-page>
 </template>
 
@@ -21,6 +35,8 @@ const userEmail = ref('')
 
 // Роутер для перенаправлення
 const router = useRouter()
+
+const isLoading = ref(false) // Стан завантаження
 
 onMounted(() => {
   loadProfile()
@@ -53,6 +69,9 @@ function loadProfile() {
         localStorage.removeItem('api_token')
         router.push('/login')
       }
+    })
+    .finally(() => {
+      isLoading.value = true
     })
 }
 

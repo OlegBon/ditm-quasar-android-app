@@ -1,86 +1,96 @@
 <template>
   <ProductDetailLayout :title="product.title || 'Loading...'">
     <q-page padding class="q-mb-xl">
-      <q-card v-if="product.title">
-        <q-card-section>
-          <div class="text-h6">{{ product.title }}</div>
-          <!-- Add favorite icon -->
-          <q-icon
-            v-if="isLoggedIn"
-            :name="isInWishlist(product.id) ? 'favorite' : 'favorite_border'"
-            class="absolute-top-right"
-            size="lg"
-            :style="{
-              margin: '14px',
-              color: isInWishlist(product.id) ? 'red' : 'grey',
-              cursor: 'pointer',
-            }"
-            @click="handleWishlistClick(product.id)"
-          />
-        </q-card-section>
+      <q-spinner
+        v-if="!isDataLoaded"
+        color="primary"
+        size="50px"
+        style="display: block; margin: 0 auto"
+      />
+      <div v-else>
+        <q-card v-if="product.title">
+          <q-card-section>
+            <div class="text-h6">{{ product.title }}</div>
+            <!-- Add favorite icon -->
+            <q-icon
+              v-if="isLoggedIn"
+              :name="isInWishlist(product.id) ? 'favorite' : 'favorite_border'"
+              class="absolute-top-right"
+              size="lg"
+              :style="{
+                margin: '14px',
+                color: isInWishlist(product.id) ? 'red' : 'grey',
+                cursor: 'pointer',
+              }"
+              @click="handleWishlistClick(product.id)"
+            />
+          </q-card-section>
 
-        <q-card-section>
-          <img :src="product.thumbnail" alt="Product image" class="full-width" />
-        </q-card-section>
+          <q-card-section>
+            <img :src="product.thumbnail" alt="Product image" class="full-width" />
+          </q-card-section>
 
-        <q-card-section>
-          <p class="text-secondary">{{ capitalize(product.category) }}</p>
-          <div>{{ product.description }}</div>
-          <div class="text-top">{{ $t('content.productDetail.brand') }} {{ product.brand }}</div>
-          <div class="text-top">{{ $t('content.productDetail.sku') }} {{ product.sku }}</div>
-          <div class="text-top">{{ $t('content.productDetail.rating') }} {{ product.rating }}</div>
-          <div class="text-top">
-            {{ $t('content.productDetail.status') }} {{ product.availabilityStatus }}
-          </div>
-          <div class="text-top">
-            {{ $t('content.productDetail.return') }} {{ product.returnPolicy }}
-          </div>
-          <div class="text-top">
-            {{ $t('content.productDetail.warranty') }} {{ product.warrantyInformation }}
-          </div>
-          <div class="text-subtitle2 text-top">
-            {{ $t('content.productDetail.price') }} {{ product.price }}
-          </div>
-        </q-card-section>
+          <q-card-section>
+            <p class="text-secondary">{{ capitalize(product.category) }}</p>
+            <div>{{ product.description }}</div>
+            <div class="text-top">{{ $t('content.productDetail.brand') }} {{ product.brand }}</div>
+            <div class="text-top">{{ $t('content.productDetail.sku') }} {{ product.sku }}</div>
+            <div class="text-top">
+              {{ $t('content.productDetail.rating') }} {{ product.rating }}
+            </div>
+            <div class="text-top">
+              {{ $t('content.productDetail.status') }} {{ product.availabilityStatus }}
+            </div>
+            <div class="text-top">
+              {{ $t('content.productDetail.return') }} {{ product.returnPolicy }}
+            </div>
+            <div class="text-top">
+              {{ $t('content.productDetail.warranty') }} {{ product.warrantyInformation }}
+            </div>
+            <div class="text-subtitle2 text-top">
+              {{ $t('content.productDetail.price') }} {{ product.price }}
+            </div>
+          </q-card-section>
 
-        <q-card-actions align="right">
-          <q-btn v-if="isLoggedIn" color="primary" @click="addToCart(product)">
-            <q-icon name="ion-cart" />
-            <span>{{ $t('content.productDetail.btnAddToCart') }}</span>
-          </q-btn>
-        </q-card-actions>
-      </q-card>
-      <q-card v-else>
-        <q-card-section> {{ $t('content.productDetail.loadingTxt') }} </q-card-section>
-      </q-card>
-      <!-- Add Similar products -->
-      <div class="similar-products">
-        <h2 class="text-h5 text-center q-mt-xl">Similar Products</h2>
-        <h5 v-if="isDataLoaded && similarProducts.length === 0" class="text-center">
-          No similar products viewed products yet.
-        </h5>
-        <q-card v-if="isDataLoaded && similarProducts.length > 0" class="q-card-similar">
-          <q-carousel v-model="activeSlide" animated swipeable>
-            <q-carousel-slide
-              v-for="(product, index) in similarProducts"
-              :key="product.id"
-              :name="index"
-            >
-              <div @click="goToProduct(product.id)" class="text-center" style="cursor: pointer">
-                <img :src="product.thumbnail" :alt="product.title" />
-                <p class="q-card-similar-text-title">{{ product.title }}</p>
-                <p>
-                  {{ product.description.slice(0, 80)
-                  }}{{ product.description.length > 140 ? '...' : '' }}
-                </p>
-                <p>{{ product.price }} $</p>
-              </div>
-            </q-carousel-slide>
-          </q-carousel>
+          <q-card-actions align="right">
+            <q-btn v-if="isLoggedIn" color="primary" @click="addToCart(product)">
+              <q-icon name="ion-cart" />
+              <span>{{ $t('content.productDetail.btnAddToCart') }}</span>
+            </q-btn>
+          </q-card-actions>
         </q-card>
+        <q-card v-else>
+          <q-card-section> {{ $t('content.productDetail.loadingTxt') }} </q-card-section>
+        </q-card>
+        <!-- Add Similar products -->
+        <div class="similar-products">
+          <h2 class="text-h5 text-center q-mt-xl">Similar Products</h2>
+          <h5 v-if="isDataLoaded && similarProducts.length === 0" class="text-center">
+            No similar products viewed products yet.
+          </h5>
+          <q-card v-if="isDataLoaded && similarProducts.length > 0" class="q-card-similar">
+            <q-carousel v-model="activeSlide" animated swipeable>
+              <q-carousel-slide
+                v-for="(product, index) in similarProducts"
+                :key="product.id"
+                :name="index"
+              >
+                <div @click="goToProduct(product.id)" class="text-center" style="cursor: pointer">
+                  <img :src="product.thumbnail" :alt="product.title" />
+                  <p class="q-card-similar-text-title">{{ product.title }}</p>
+                  <p>
+                    {{ product.description.slice(0, 80)
+                    }}{{ product.description.length > 140 ? '...' : '' }}
+                  </p>
+                  <p>{{ product.price }} $</p>
+                </div>
+              </q-carousel-slide>
+            </q-carousel>
+          </q-card>
+        </div>
+        <!-- Add recently viewed products -->
+        <RecentlyViewedProducts />
       </div>
-      <!-- Add recently viewed products -->
-      <RecentlyViewedProducts />
     </q-page>
   </ProductDetailLayout>
 </template>
@@ -107,6 +117,8 @@ const similarProducts = ref([])
 
 const isDataLoaded = ref(false) // Стан завантаження
 const activeSlide = ref(0) // Поточний слайд у каруселі
+
+const isLoading = ref(false)
 
 onMounted(async () => {
   try {
@@ -149,8 +161,6 @@ function addToCart(product) {
 function isInWishlist(productId) {
   return wishlist.value.includes(productId)
 }
-
-const isLoading = ref(false)
 
 async function handleWishlistClick(productId) {
   if (isLoading.value) return // Запобігаємо дублювання кліків

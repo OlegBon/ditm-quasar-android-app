@@ -25,24 +25,42 @@
       option-value="value"
     />
 
-    <p class="quantity-products">
-      {{ $t('content.products.quantityOfProducts') }}<span>{{ productCount }}</span>
-    </p>
+    <q-spinner
+      v-if="!isLoading"
+      color="primary"
+      size="50px"
+      style="display: block; margin: 0 auto"
+    />
+    <div v-else>
+      <p class="quantity-products">
+        {{ $t('content.products.quantityOfProducts') }}<span>{{ productCount }}</span>
+      </p>
 
-    <div>
-      <q-list v-for="product in filteredAndDisplayedProducts" :key="product.id" bordered separator>
-        <q-item clickable v-ripple @click="goToProduct(product.id)">
-          <q-item-section class="product-img-section">
-            <img class="product-img" alt="Product image" :src="product.thumbnail" loading="lazy" />
-          </q-item-section>
-          <q-item-section>{{ product.title }}</q-item-section>
-          <q-item-section class="button-section">
-            <q-btn v-if="isLoggedIn" color="primary" @click.stop="addToCart(product)">
-              <q-icon name="ion-cart" />
-            </q-btn>
-          </q-item-section>
-        </q-item>
-      </q-list>
+      <div>
+        <q-list
+          v-for="product in filteredAndDisplayedProducts"
+          :key="product.id"
+          bordered
+          separator
+        >
+          <q-item clickable v-ripple @click="goToProduct(product.id)">
+            <q-item-section class="product-img-section">
+              <img
+                class="product-img"
+                alt="Product image"
+                :src="product.thumbnail"
+                loading="lazy"
+              />
+            </q-item-section>
+            <q-item-section>{{ product.title }}</q-item-section>
+            <q-item-section class="button-section">
+              <q-btn v-if="isLoggedIn" color="primary" @click.stop="addToCart(product)">
+                <q-icon name="ion-cart" />
+              </q-btn>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
     </div>
   </q-page>
 </template>
@@ -54,6 +72,8 @@ import { api } from 'boot/axios'
 import { useCartStore } from '../store/cartStore'
 import { tryFetchUser, user } from '../utils/userService'
 import axios from 'axios'
+
+const isLoading = ref(false)
 
 onMounted(() => {
   tryFetchUser()
@@ -118,6 +138,7 @@ async function loadAllProducts() {
   const { data } = await api('https://testbackend.bon.kharkov.ua/api/products')
   // allProducts.value = data.products
   allProducts.value = data
+  isLoading.value = true // Дані завантажені
 }
 
 onMounted(() => {

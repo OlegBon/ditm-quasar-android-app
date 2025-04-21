@@ -1,31 +1,44 @@
 <template>
   <q-page padding class="q-mb-xl">
     <h1>Welcome to your Wishlist!</h1>
-    <div>
-      <h5 v-if="wishlist.length === 0" class="text-center">Your wishlist is empty.</h5>
-    </div>
-    <div v-if="wishlist.length > 0">
-      <p>
-        Products in your wishlist:
-        <span>{{ wishlist.length }}</span>
-      </p>
-      <q-list v-for="product in wishlist" :key="product.id" bordered separator>
-        <q-item clickable v-ripple @click="goToProduct(product.id)">
-          <q-item-section class="product-img-section">
-            <img class="product-img" alt="Product image" :src="product.thumbnail" loading="lazy" />
-          </q-item-section>
-          <q-item-section>{{ product.title }}</q-item-section>
-          <q-item-section class="button-section">
-            <q-icon
-              name="favorite"
-              class="absolute-top-right"
-              size="lg"
-              style="margin: 20px 14px; color: red; cursor: pointer"
-              @click.stop="removeFromWishlist(product.id)"
-            />
-          </q-item-section>
-        </q-item>
-      </q-list>
+    <q-spinner
+      v-if="!isDataLoaded"
+      color="primary"
+      size="50px"
+      style="display: block; margin: 0 auto"
+    />
+    <div v-else>
+      <div>
+        <h5 v-if="wishlist.length === 0" class="text-center">Your wishlist is empty.</h5>
+      </div>
+      <div v-if="wishlist.length > 0">
+        <p>
+          Products in your wishlist:
+          <span>{{ wishlist.length }}</span>
+        </p>
+        <q-list v-for="product in wishlist" :key="product.id" bordered separator>
+          <q-item clickable v-ripple @click="goToProduct(product.id)">
+            <q-item-section class="product-img-section">
+              <img
+                class="product-img"
+                alt="Product image"
+                :src="product.thumbnail"
+                loading="lazy"
+              />
+            </q-item-section>
+            <q-item-section>{{ product.title }}</q-item-section>
+            <q-item-section class="button-section">
+              <q-icon
+                name="favorite"
+                class="absolute-top-right"
+                size="lg"
+                style="margin: 20px 14px; color: red; cursor: pointer"
+                @click.stop="removeFromWishlist(product.id)"
+              />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
     </div>
   </q-page>
 </template>
