@@ -62,34 +62,61 @@
         <q-card v-else>
           <q-card-section> {{ $t('content.productDetail.loadingTxt') }} </q-card-section>
         </q-card>
-        <!-- Add Similar products -->
-        <div class="similar-products">
-          <h2 class="text-h5 text-center q-mt-xl">Similar Products</h2>
-          <h5 v-if="isDataLoaded && similarProducts.length === 0" class="text-center">
-            No similar products viewed products yet.
-          </h5>
-          <q-card v-if="isDataLoaded && similarProducts.length > 0" class="q-card-similar">
-            <q-carousel v-model="activeSlide" animated swipeable>
-              <q-carousel-slide
-                v-for="(product, index) in similarProducts"
-                :key="product.id"
-                :name="index"
-              >
-                <div @click="goToProduct(product.id)" class="text-center" style="cursor: pointer">
-                  <img :src="product.thumbnail" :alt="product.title" />
-                  <p class="q-card-similar-text-title">{{ product.title }}</p>
-                  <p>
-                    {{ product.description.slice(0, 80)
-                    }}{{ product.description.length > 140 ? '...' : '' }}
-                  </p>
-                  <p>{{ product.price }} $</p>
-                </div>
-              </q-carousel-slide>
-            </q-carousel>
-          </q-card>
+
+        <div class="q-mt-xl">
+          <!-- Панель вкладок -->
+          <q-tabs v-model="activeTab" class="bg-primary text-white">
+            <q-tab name="reviews" label="Reviews" />
+            <q-tab name="similar" label="Similar Products" />
+            <q-tab name="recentlyViewed" label="Recently Viewed Products" />
+          </q-tabs>
+
+          <!-- Вміст вкладок -->
+          <q-tab-panels v-model="activeTab" animated>
+            <!-- Відгуки -->
+            <q-tab-panel name="reviews">
+              <ReviewsComponent />
+            </q-tab-panel>
+
+            <!-- Схожі товари -->
+            <q-tab-panel name="similar">
+              <div class="similar-products">
+                <h2 class="text-h5 text-center q-mt-xl">Similar Products</h2>
+                <h5 v-if="isDataLoaded && similarProducts.length === 0" class="text-center">
+                  No similar products viewed yet.
+                </h5>
+                <q-card v-if="isDataLoaded && similarProducts.length > 0" class="q-card-similar">
+                  <q-carousel v-model="activeSlide" animated swipeable>
+                    <q-carousel-slide
+                      v-for="(product, index) in similarProducts"
+                      :key="product.id"
+                      :name="index"
+                    >
+                      <div
+                        @click="goToProduct(product.id)"
+                        class="text-center"
+                        style="cursor: pointer"
+                      >
+                        <img :src="product.thumbnail" :alt="product.title" />
+                        <p class="q-card-similar-text-title">{{ product.title }}</p>
+                        <p>
+                          {{ product.description.slice(0, 80)
+                          }}{{ product.description.length > 140 ? '...' : '' }}
+                        </p>
+                        <p>{{ product.price }} $</p>
+                      </div>
+                    </q-carousel-slide>
+                  </q-carousel>
+                </q-card>
+              </div>
+            </q-tab-panel>
+
+            <!-- Переглянуті товари -->
+            <q-tab-panel name="recentlyViewed">
+              <RecentlyViewedProducts />
+            </q-tab-panel>
+          </q-tab-panels>
         </div>
-        <!-- Add recently viewed products -->
-        <RecentlyViewedProducts />
       </div>
     </q-page>
   </ProductDetailLayout>
@@ -104,6 +131,7 @@ import { useCartStore } from 'src/store/cartStore'
 import { tryFetchUser, user } from '../utils/userService'
 import axios from 'axios'
 import RecentlyViewedProducts from '../components/RecentlyViewedProducts.vue'
+import ReviewsComponent from '../components/ReviewsComponent.vue'
 
 const router = useRoute()
 
@@ -119,6 +147,8 @@ const isDataLoaded = ref(false) // Стан завантаження
 const activeSlide = ref(0) // Поточний слайд у каруселі
 
 const isLoading = ref(false)
+
+const activeTab = ref('reviews') // Робимо вкладку "Reviews" активною за замовчуванням
 
 onMounted(async () => {
   try {
